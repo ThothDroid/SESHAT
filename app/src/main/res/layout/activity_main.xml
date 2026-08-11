@@ -57,7 +57,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/button_export"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
