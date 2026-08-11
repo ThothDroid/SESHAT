@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">SESHAT Example App</string>
+    <string name="title">Test the SESHAT-Library here:</string>
+    <string name="input_glyphx">Input GlyphX:</string>
+    <string name="export">Export</string>
 </resources>
