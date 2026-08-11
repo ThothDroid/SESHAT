@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SESHAT Example App"
 include(":app")
+include(":seshat")
