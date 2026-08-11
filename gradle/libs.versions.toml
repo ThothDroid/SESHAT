@@ -1,5 +1,6 @@
 [versions]
 agp = "9.3.1"
+githubSignprovider = "1.0.2"
 glyphconverter = "1.7.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -11,6 +12,7 @@ material = "1.14.0"
 constraintlayout = "2.2.2"
 
 [libraries]
+github-signprovider = { module = "com.github.ThothDroid:SignProvider", version.ref = "githubSignprovider" }
 glyphconverter = { module = "com.github.ThothDroid:GlyphConverter", version.ref = "glyphconverter" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
