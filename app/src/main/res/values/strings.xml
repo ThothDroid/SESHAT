@@ -3,4 +3,5 @@
     <string name="title">Test the SESHAT-Library here:</string>
     <string name="input_glyphx">Input GlyphX:</string>
     <string name="export">Export</string>
+    <string name="output_title">Output SVG:</string>
 </resources>
