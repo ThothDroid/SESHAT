@@ -1,18 +1,22 @@
 [versions]
 agp = "9.3.1"
+glyphconverter = "1.7.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 kotlin = "2.4.10"
 appcompat = "1.7.1"
+maat = "1.5.1"
 material = "1.14.0"
 constraintlayout = "2.2.2"
 
 [libraries]
+glyphconverter = { module = "com.github.ThothDroid:GlyphConverter", version.ref = "glyphconverter" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+maat = { module = "com.github.ThothDroid:MAAT", version.ref = "maat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 

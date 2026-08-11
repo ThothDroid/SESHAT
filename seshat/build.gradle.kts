@@ -21,6 +21,11 @@ android {
 }
 
 dependencies {
+
+    // custom libraries
+    implementation(libs.maat)
+    implementation(libs.glyphconverter)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
