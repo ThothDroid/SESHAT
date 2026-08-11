@@ -37,6 +37,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":seshat"))
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
