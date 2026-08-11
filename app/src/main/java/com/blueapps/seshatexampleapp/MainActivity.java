@@ -8,7 +8,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.blueapps.seshat.Seshat;
 import com.blueapps.seshatexampleapp.databinding.ActivityMainBinding;
+
+import org.w3c.dom.Document;
+
+import javax.xml.transform.TransformerException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        binding.buttonExport.setOnClickListener(v -> {
+            Seshat seshat = new Seshat(binding.input.getText().toString());
+            try {
+                binding.output.setText(seshat.convertToSVGString());
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
         });
     }
 }
