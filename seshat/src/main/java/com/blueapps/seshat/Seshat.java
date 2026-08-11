@@ -1,10 +1,13 @@
 package com.blueapps.seshat;
 
+import android.content.Context;
+
 import com.blueapps.seshat.svg.SVGCreator;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -28,16 +31,16 @@ public class Seshat {
         this.glyphX = GlyphX;
     }
 
-    public Document convertToSVGDocument(){
+    public Document convertToSVGDocument(Context context){
         try {
-            return SVGCreator.createSVG(glyphX);
-        } catch (ParserConfigurationException e) {
+            return SVGCreator.createSVG(context, glyphX);
+        } catch (ParserConfigurationException | XmlPullParserException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public String convertToSVGString() {
-        return convertToXmlString(convertToSVGDocument());
+    public String convertToSVGString(Context context) {
+        return convertToXmlString(convertToSVGDocument(context));
     }
 
     public static Document convertToXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {
