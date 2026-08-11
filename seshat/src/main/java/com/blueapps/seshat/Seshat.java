@@ -1,5 +1,7 @@
 package com.blueapps.seshat;
 
+import com.blueapps.seshat.svg.SVGCreator;
+
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -27,10 +29,14 @@ public class Seshat {
     }
 
     public Document convertToSVGDocument(){
-        return null;
+        try {
+            return SVGCreator.createSVG(glyphX);
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public String convertToSVGString() throws TransformerException {
+    public String convertToSVGString() {
         return convertToXmlString(convertToSVGDocument());
     }
 
@@ -40,12 +46,15 @@ public class Seshat {
         return builder.parse(new InputSource(new StringReader(xml)));
     }
 
-    public static String convertToXmlString(Document xml) throws TransformerException {
+    public static String convertToXmlString(Document xml) {
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
 
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "public");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
             transformer.setOutputProperty(OutputKeys.INDENT, "no");
 
             StringWriter writer = new StringWriter();
