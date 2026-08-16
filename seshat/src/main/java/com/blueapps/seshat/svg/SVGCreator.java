@@ -17,6 +17,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class SVGCreator {
 
+    // Constants for SVG
+    public static final String SVG_ROOT_TAG = "svg";
+    public static final String SVG_PATH_TAG = "path";
+    public static final String SVG_PATH_ATTRIBUTE_D = "d";
+
     public static Document createSVG(Context context, String glyphX) throws ParserConfigurationException, XmlPullParserException, IOException {
 
         // create Document
@@ -25,13 +30,18 @@ public class SVGCreator {
         Document svg = builder.newDocument();
 
         // create root element
-        Element root = svg.createElement("svg");
+        Element root = svg.createElement(SVG_ROOT_TAG);
         svg.appendChild(root);
 
-        // get image
+        // create the <path> element
+        Element path = svg.createElement(SVG_PATH_TAG);
+        // get sign path
         SignProvider signProvider = new SignProvider(context);
-        Drawable sign = signProvider.getSign(glyphX);
-
+        String signPath = signProvider.getSignPathData(glyphX);
+        // set the "d" attribute of the <path> element
+        path.setAttribute(SVG_PATH_ATTRIBUTE_D, signPath);
+        // add the <path> element to the root element
+        root.appendChild(path);
 
         return svg;
     }
