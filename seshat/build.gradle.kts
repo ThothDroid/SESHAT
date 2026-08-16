@@ -25,7 +25,7 @@ dependencies {
     // custom libraries
     implementation(libs.maat)
     implementation(libs.glyphconverter)
-    implementation(libs.github.signprovider);
+    implementation(libs.signprovider);
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
