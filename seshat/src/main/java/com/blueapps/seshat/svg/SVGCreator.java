@@ -1,15 +1,24 @@
 package com.blueapps.seshat.svg;
 
 import android.content.Context;
+import android.graphics.Rect;
 
+import com.blueapps.maat.BoundCalculation;
+import com.blueapps.maat.BoundProperty;
+import com.blueapps.maat.ValuePair;
 import com.blueapps.signprovider.SignProvider;
 import com.blueapps.signprovider.SvgData;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,7 +37,7 @@ public class SVGCreator {
     public static final String SVG_PATH_TAG = "path";
     public static final String SVG_PATH_ATTRIBUTE_D = "d";
 
-    public static Document createSVG(Context context, String glyphX, String title, String description) throws ParserConfigurationException, XmlPullParserException, IOException {
+    public static Document createSVG(Context context, String glyphX, String title, String description) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
 
         // create Document
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -53,21 +62,91 @@ public class SVGCreator {
             root.appendChild(descElement);
         }
 
-        // create the <path> element
-        Element path = svg.createElement(SVG_PATH_TAG);
-        // get sign path
-        SignProvider signProvider = new SignProvider(context);
-        SvgData svgData = signProvider.getSvgData(glyphX);
-        String signPath = svgData.getPathData();
-        // set the "d" attribute of the <path> element
-        path.setAttribute(SVG_PATH_ATTRIBUTE_D, signPath);
-        // add the <path> element to the root element
-        root.appendChild(path);
+        // Convert String to XmlDocument
+        InputStream inputStream = new ByteArrayInputStream(glyphX.getBytes(StandardCharsets.UTF_8));
+        Document document = builder.parse(inputStream);
+
+        attachSignChildren(context, svg, root, document);
 
         // set the viewBox attribute for the root element
-        root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + svgData.getWidth() + " " + svgData.getHeight());
+        root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 100 100");
 
         return svg;
+    }
+
+    private static void attachSignChildren(Context context, Document svg, Element root, Document document) throws XmlPullParserException, IOException, SAXException {
+        BoundCalculation boundCalculation = new BoundCalculation(document);
+        ArrayList<String> ids = boundCalculation.getIds(false, false);
+
+        ArrayList<String> paths = new ArrayList<>();
+        ArrayList<ValuePair<Float, Float>> dimensions = new ArrayList<>();
+        SignProvider signProvider = new SignProvider(context);
+        for (String id : ids) {
+            SvgData svgData = signProvider.getSvgData(id);
+            if (svgData != null) {
+                paths.add(svgData.getPathData());
+                // Extract width and height
+                String widthStr = svgData.getWidth();
+                String heightStr = svgData.getHeight();
+                if (widthStr != null && heightStr != null) {
+                    try {
+                        float width = Float.parseFloat(widthStr);
+                        float height = Float.parseFloat(heightStr);
+                        dimensions.add(new ValuePair<>(width, height));
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    throw new RuntimeException(" Width or Height is null for id: " + id);
+                }
+            }
+        }
+
+        BoundProperty boundProperty = new BoundProperty(0,0,40,1,0,0,false,0,0,0,0,0,0,0,0);
+        ArrayList<Rect> bounds = boundCalculation.getBounds(dimensions, boundProperty);
+
+        int counter = 0;
+        for (Rect bound : bounds) {
+            // create the <path> element
+            Element path = svg.createElement(SVG_PATH_TAG);
+            // get sign path
+            String signPath = paths.get(counter);
+            // apply  transformation to the sign path based on the bounds
+            signPath = applyBound(signPath, bound, dimensions.get(counter).getKey(), dimensions.get(counter).getValue());
+            // set the "d" attribute of the <path> element
+            path.setAttribute(SVG_PATH_ATTRIBUTE_D, signPath);
+            // add the <path> element to the root element
+            root.appendChild(path);
+            counter++;
+        }
+    }
+
+    /*private static String applyBound(String pathData, Rect bound, float originalWidth, float originalHeight) {
+        // Calculate the scaling factors
+        float scaleX = (float) bound.width() / originalWidth;
+        float scaleY = (float) bound.height() / originalHeight;
+
+        // Calculate the translation values
+        float translateX = bound.left;
+        float translateY = bound.top;
+
+        return SVGPathTransformer.transformPath(pathData, translateX, translateY, scaleX, scaleY);
+    }*/
+
+    private static String applyBound(String pathData, Rect bound, float originalWidth, float originalHeight) {
+        // Calculate the scaling factors
+        float scaleX = (float) bound.width() / originalWidth;
+        float scaleY = (float) bound.height() / originalHeight;
+
+        // Calculate the translation values
+        float translateX = bound.left;
+        float translateY = bound.top;
+
+        // Create a transformation matrix for scaling and translation
+        String transform = "scale(" + scaleX + " " + scaleY + ") translate(" + translateX + " " + translateY + ")";
+
+        // Apply the transformation to the path data
+        return "M" + transform + " " + pathData;
     }
 
 }

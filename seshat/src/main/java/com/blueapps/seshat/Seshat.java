@@ -38,7 +38,8 @@ public class Seshat {
     public Document convertToSVGDocument(Context context){
         try {
             return SVGCreator.createSVG(context, glyphX, title, description);
-        } catch (ParserConfigurationException | XmlPullParserException | IOException e) {
+        } catch (ParserConfigurationException | XmlPullParserException | IOException |
+                 SAXException e) {
             throw new RuntimeException(e);
         }
     }
