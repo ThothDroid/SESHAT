@@ -3,6 +3,7 @@ package com.blueapps.seshat.svg;
 import android.content.Context;
 
 import com.blueapps.signprovider.SignProvider;
+import com.blueapps.signprovider.SvgData;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -56,14 +57,15 @@ public class SVGCreator {
         Element path = svg.createElement(SVG_PATH_TAG);
         // get sign path
         SignProvider signProvider = new SignProvider(context);
-        String signPath = signProvider.getSignPathData(glyphX);
+        SvgData svgData = signProvider.getSvgData(glyphX);
+        String signPath = svgData.getPathData();
         // set the "d" attribute of the <path> element
         path.setAttribute(SVG_PATH_ATTRIBUTE_D, signPath);
         // add the <path> element to the root element
         root.appendChild(path);
 
         // set the viewBox attribute for the root element
-        root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 1200 1200");
+        root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + svgData.getWidth() + " " + svgData.getHeight());
 
         return svg;
     }
