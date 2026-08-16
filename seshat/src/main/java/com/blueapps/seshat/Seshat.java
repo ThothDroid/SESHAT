@@ -26,14 +26,18 @@ import javax.xml.transform.stream.StreamResult;
 public class Seshat {
 
     private String glyphX;
+    private String title;
+    private String description;
 
-    public Seshat(String GlyphX){
+    public Seshat(String GlyphX, String Title, String Description){
         this.glyphX = GlyphX;
+        this.title = Title;
+        this.description = Description;
     }
 
     public Document convertToSVGDocument(Context context){
         try {
-            return SVGCreator.createSVG(context, glyphX);
+            return SVGCreator.createSVG(context, glyphX, title, description);
         } catch (ParserConfigurationException | XmlPullParserException | IOException e) {
             throw new RuntimeException(e);
         }

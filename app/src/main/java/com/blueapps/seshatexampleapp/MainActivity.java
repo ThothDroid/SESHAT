@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.buttonExport.setOnClickListener(v -> {
-            Seshat seshat = new Seshat(binding.input.getText().toString());
+            Seshat seshat = new Seshat(binding.input.getText().toString(), null, null);
             binding.output.setText(seshat.convertToSVGString(this));
         });
     }
