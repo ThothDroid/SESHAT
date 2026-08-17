@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.maat)
     implementation(libs.glyphconverter)
     implementation(libs.signprovider);
+    implementation(libs.commons.lang3)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

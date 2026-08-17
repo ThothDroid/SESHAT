@@ -1,5 +1,6 @@
 [versions]
 agp = "9.3.1"
+commonsLang3 = "3.20.0"
 signprovider = "1.1.1"
 glyphconverter = "1.8.0"
 junit = "4.13.2"
@@ -12,6 +13,7 @@ material = "1.14.0"
 constraintlayout = "2.2.2"
 
 [libraries]
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3" }
 signprovider = { module = "com.github.ThothDroid:SignProvider", version.ref = "signprovider" }
 glyphconverter = { module = "com.github.ThothDroid:GlyphConverter", version.ref = "glyphconverter" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

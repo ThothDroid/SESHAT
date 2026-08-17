@@ -1,6 +1,6 @@
 package com.blueapps.seshat.svg;
 
-import static com.blueapps.seshat.svg.PathTransformer.applyBound;
+import static com.blueapps.seshat.svg.parser.PathTransformer.applyBound;
 
 import android.content.Context;
 import android.graphics.Rect;
