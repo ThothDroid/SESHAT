@@ -1,5 +1,7 @@
 package com.blueapps.seshat.svg;
 
+import static com.blueapps.seshat.svg.PathTransformer.applyBound;
+
 import android.content.Context;
 import android.graphics.Rect;
 
@@ -8,7 +10,6 @@ import com.blueapps.maat.BoundProperty;
 import com.blueapps.maat.ValuePair;
 import com.blueapps.signprovider.SignProvider;
 import com.blueapps.signprovider.SvgData;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -66,15 +67,15 @@ public class SVGCreator {
         InputStream inputStream = new ByteArrayInputStream(glyphX.getBytes(StandardCharsets.UTF_8));
         Document document = builder.parse(inputStream);
 
-        attachSignChildren(context, svg, root, document);
+        BoundCalculation boundCalculation = attachSignChildren(context, svg, root, document);
 
         // set the viewBox attribute for the root element
-        root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 100 100");
+        root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());
 
         return svg;
     }
 
-    private static void attachSignChildren(Context context, Document svg, Element root, Document document) throws XmlPullParserException, IOException, SAXException {
+    private static BoundCalculation attachSignChildren(Context context, Document svg, Element root, Document document) throws XmlPullParserException, IOException, SAXException {
         BoundCalculation boundCalculation = new BoundCalculation(document);
         ArrayList<String> ids = boundCalculation.getIds(false, false);
 
@@ -119,34 +120,8 @@ public class SVGCreator {
             root.appendChild(path);
             counter++;
         }
-    }
 
-    /*private static String applyBound(String pathData, Rect bound, float originalWidth, float originalHeight) {
-        // Calculate the scaling factors
-        float scaleX = (float) bound.width() / originalWidth;
-        float scaleY = (float) bound.height() / originalHeight;
-
-        // Calculate the translation values
-        float translateX = bound.left;
-        float translateY = bound.top;
-
-        return SVGPathTransformer.transformPath(pathData, translateX, translateY, scaleX, scaleY);
-    }*/
-
-    private static String applyBound(String pathData, Rect bound, float originalWidth, float originalHeight) {
-        // Calculate the scaling factors
-        float scaleX = (float) bound.width() / originalWidth;
-        float scaleY = (float) bound.height() / originalHeight;
-
-        // Calculate the translation values
-        float translateX = bound.left;
-        float translateY = bound.top;
-
-        // Create a transformation matrix for scaling and translation
-        String transform = "scale(" + scaleX + " " + scaleY + ") translate(" + translateX + " " + translateY + ")";
-
-        // Apply the transformation to the path data
-        return "M" + transform + " " + pathData;
+        return boundCalculation;
     }
 
 }
