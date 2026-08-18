@@ -18,7 +18,7 @@ public class PathTransformer {
 
         SVGPath svgPath = new SVGPath(path);
         svgPath.applyTransformation(sx, sy, bound.left, bound.top);
-        //svgPath.applyTransformation(1,1,0,0);
+        //svgPath.applyTransformation(0.01F, 0.01F,5,5);
         path = svgPath.toString();
 
         return path;

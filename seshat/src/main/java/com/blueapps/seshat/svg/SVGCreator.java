@@ -71,6 +71,7 @@ public class SVGCreator {
 
         // set the viewBox attribute for the root element
         root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());
+        //root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 1000 1000");
 
         return svg;
     }
@@ -103,6 +104,7 @@ public class SVGCreator {
             }
         }
 
+        // mit textSize=1000 funktioniert es komischereise
         BoundProperty boundProperty = new BoundProperty(0,0,40,1,0,0,false,0,0,0,0,0,0,0,0);
         ArrayList<Rect> bounds = boundCalculation.getBounds(dimensions, boundProperty);
 
