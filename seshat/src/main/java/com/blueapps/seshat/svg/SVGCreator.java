@@ -104,7 +104,6 @@ public class SVGCreator {
             }
         }
 
-        // mit textSize=1000 funktioniert es komischereise
         BoundProperty boundProperty = new BoundProperty(0,0,40,1,0,0,false,0,0,0,0,0,0,0,0);
         ArrayList<Rect> bounds = boundCalculation.getBounds(dimensions, boundProperty);
 
