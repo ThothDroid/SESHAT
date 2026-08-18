@@ -15,8 +15,8 @@ public class VCommand extends Command {
 
         int counter = 0;
         for (float value: values){
-            value *= sy;
             if (!relative) value += ty;
+            value *= sy;
             values.set(counter, value);
             counter++;
         }

@@ -55,12 +55,12 @@ public class Command {
         for (float value: values){
             if (counter%2 != 0){
                 // uneven
-                value *= sx;
                 if (!relative) value += tx;
+                value *= sx;
             } else {
                 // even
-                value *= sy;
                 if (!relative) value += ty;
+                value *= sy;
             }
             values.set(counter, value);
             counter++;
