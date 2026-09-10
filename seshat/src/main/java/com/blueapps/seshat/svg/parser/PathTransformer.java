@@ -23,4 +23,12 @@ public class PathTransformer {
         return path;
     }
 
+    public static String mirrorPathVertically(String path){
+
+        //
+
+        return path;
+
+    }
+
 }

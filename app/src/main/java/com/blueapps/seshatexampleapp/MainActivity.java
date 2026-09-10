@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 new ActivityResultContracts.StartActivityForResult(), this);
 
         binding.buttonExport.setOnClickListener(v -> {
-            Seshat seshat = new Seshat(binding.input.getText().toString(), null, null);
-            exportContent = seshat.convertToSVGString(this);
+            Seshat seshat = new Seshat(binding.input.getText().toString());
+            exportContent = seshat.convertToSVGString(this, "Test", "Test description");
             startSAF(activityResultLauncher);
         });
     }

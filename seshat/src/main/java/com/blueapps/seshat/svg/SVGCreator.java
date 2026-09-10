@@ -1,6 +1,7 @@
 package com.blueapps.seshat.svg;
 
 import static com.blueapps.seshat.svg.parser.PathTransformer.applyBound;
+import static com.blueapps.seshat.svg.parser.PathTransformer.mirrorPathVertically;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -38,7 +39,7 @@ public class SVGCreator {
     public static final String SVG_PATH_TAG = "path";
     public static final String SVG_PATH_ATTRIBUTE_D = "d";
 
-    public static Document createSVG(Context context, String glyphX, String title, String description) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
+    public static Document createSVG(Context context, String glyphX, BoundProperty property, String title, String description) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
 
         // create Document
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -67,7 +68,7 @@ public class SVGCreator {
         InputStream inputStream = new ByteArrayInputStream(glyphX.getBytes(StandardCharsets.UTF_8));
         Document document = builder.parse(inputStream);
 
-        BoundCalculation boundCalculation = attachSignChildren(context, svg, root, document);
+        BoundCalculation boundCalculation = attachSignChildren(context, svg, root, document, property);
 
         // set the viewBox attribute for the root element
         root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());
@@ -75,7 +76,7 @@ public class SVGCreator {
         return svg;
     }
 
-    private static BoundCalculation attachSignChildren(Context context, Document svg, Element root, Document document) throws XmlPullParserException, IOException, SAXException {
+    private static BoundCalculation attachSignChildren(Context context, Document svg, Element root, Document document, BoundProperty property) throws XmlPullParserException, IOException, SAXException {
         BoundCalculation boundCalculation = new BoundCalculation(document);
         ArrayList<String> ids = boundCalculation.getIds(false, false);
 
@@ -103,8 +104,7 @@ public class SVGCreator {
             }
         }
 
-        BoundProperty boundProperty = new BoundProperty(0,0,40,1,0,0,false,0,0,0,0,0,0,0,0);
-        ArrayList<Rect> bounds = boundCalculation.getBounds(dimensions, boundProperty);
+        ArrayList<Rect> bounds = boundCalculation.getBounds(dimensions, property);
 
         int counter = 0;
         for (Rect bound : bounds) {
@@ -112,6 +112,10 @@ public class SVGCreator {
             Element path = svg.createElement(SVG_PATH_TAG);
             // get sign path
             String signPath = paths.get(counter);
+            // mirror the path vertically
+            if (property.getWritingDirection() == BoundProperty.WRITING_DIRECTION_RTL){
+                signPath = mirrorPathVertically(signPath);
+            }
             // apply  transformation to the sign path based on the bounds
             signPath = applyBound(signPath, bound, dimensions.get(counter).getKey(), dimensions.get(counter).getValue());
             // set the "d" attribute of the <path> element
