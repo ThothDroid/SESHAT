@@ -49,7 +49,9 @@ public class Seshat {
 
     public Document convertToSVGDocument(Context context, String title, String description) {
         try {
-            BoundProperty property = new BoundProperty(0,0,40,1,0,0,false,0,0,0,0,0,0,0,0);
+            BoundProperty property = new BoundProperty(0, 0, textSize, verticalOrientation, writingDirection,
+                    writingLayout, drawLines, lineThickness, pagePaddingLeft, pagePaddingTop,
+                    pagePaddingRight, pagePaddingBottom, signPadding, layoutSignPadding, interLinePadding);
             return SVGCreator.createSVG(context, glyphX, property, title, description);
         } catch (ParserConfigurationException | XmlPullParserException | IOException |
                  SAXException e) {
