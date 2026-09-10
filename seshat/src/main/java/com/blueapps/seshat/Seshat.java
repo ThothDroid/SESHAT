@@ -93,6 +93,13 @@ public class Seshat {
 
     // Getters and Setters for properties
 
+    public String getGlyphX() {
+        return glyphX;
+    }
+
+    public void setGlyphX(String glyphX) {
+        this.glyphX = glyphX;
+    }
 
     public float getTextSize() {
         return textSize;
