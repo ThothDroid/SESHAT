@@ -29,19 +29,19 @@ public class Seshat {
     private String glyphX;
 
     // basic properties
-    private float textSize = 40f;
+    private float textSize = 100f;
     private int verticalOrientation = BoundProperty.VERTICAL_ORIENTATION_MIDDLE;
     private int writingDirection = BoundProperty.WRITING_DIRECTION_LTR;
     private int writingLayout = BoundProperty.WRITING_LAYOUT_LINES;
     private boolean drawLines = false;
-    private float lineThickness = 0f;
+    private float lineThickness = 2f;
     private float pagePaddingLeft = 0f;
     private float pagePaddingTop = 0f;
     private float pagePaddingRight = 0f;
     private float pagePaddingBottom = 0f;
-    private float signPadding = 0f;
-    private float layoutSignPadding = 0f;
-    private float interLinePadding = 0f;
+    private float signPadding = 10f;
+    private float layoutSignPadding = 5f;
+    private float interLinePadding = 25f;
 
     public Seshat(String GlyphX){
         this.glyphX = GlyphX;
