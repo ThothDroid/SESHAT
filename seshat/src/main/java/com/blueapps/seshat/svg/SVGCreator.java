@@ -71,7 +71,6 @@ public class SVGCreator {
 
         // set the viewBox attribute for the root element
         root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());
-        //root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 1000 1000");
 
         return svg;
     }

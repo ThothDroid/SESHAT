@@ -53,14 +53,14 @@ public class Command {
     public void applyTransformation(float sx, float sy, float tx, float ty){
         int counter = 0;
         for (float value: values){
-            if (counter%2 != 0){
-                // uneven
-                if (!relative) value += tx;
+            if (counter % 2 == 0){
+                // x coordinate
                 value *= sx;
+                if (!relative) value += tx;
             } else {
-                // even
-                if (!relative) value += ty;
+                // y coordinate
                 value *= sy;
+                if (!relative) value += ty;
             }
             values.set(counter, value);
             counter++;

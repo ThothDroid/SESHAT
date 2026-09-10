@@ -15,8 +15,8 @@ public class HCommand extends Command {
 
         int counter = 0;
         for (float value: values){
-            if (!relative) value += tx;
             value *= sx;
+            if (!relative) value += tx;
             values.set(counter, value);
             counter++;
         }
