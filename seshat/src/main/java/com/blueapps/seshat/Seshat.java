@@ -26,7 +26,7 @@ import javax.xml.transform.stream.StreamResult;
 
 public class Seshat {
 
-    private String glyphX;
+    private String glyphX = "";
 
     // basic properties
     private float textSize = 100f;
@@ -46,6 +46,8 @@ public class Seshat {
     public Seshat(String GlyphX){
         this.glyphX = GlyphX;
     }
+
+    public Seshat(){}
 
     public Document convertToSVGDocument(Context context, String title, String description) {
         try {
