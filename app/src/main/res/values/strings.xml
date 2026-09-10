@@ -4,4 +4,25 @@
     <string name="input_glyphx">Input GlyphX:</string>
     <string name="export">Export</string>
     <string name="output_title">Output SVG:</string>
+    <string name="vert_orient_top">top</string>
+    <string name="vert_orient_middle">middle</string>
+    <string name="vert_orient_bottom">bottom</string>
+    <string name="writing_layout_l">lines</string>
+    <string name="writing_layout_c">columns</string>
+    <string name="text_size_title">"Text Size: "</string>
+    <string name="text_size_title_start">"Text Size: 40sp"</string>
+    <string name="button_change_text_color">change text color</string>
+    <string name="button_change_bg_color">change background color</string>
+    <string name="writing_direction_ltr">left to right</string>
+    <string name="writing_direction_rtl">right to left</string>
+    <string name="draw_lines_title">Draw Lines</string>
+    <string name="line_thickness_title">"Line Thickness: "</string>
+    <string name="padding_title">Padding</string>
+    <string name="padding_left_title">"Left: "</string>
+    <string name="padding_top_title">"Top: "</string>
+    <string name="padding_right_title">"Right: "</string>
+    <string name="padding_bottom_title">"Bottom: "</string>
+    <string name="sign_padding_title">"Sign Padding: "</string>
+    <string name="layout_sign_padding_title">"Layout Sign Padding: "</string>
+    <string name="inter_line_padding">"Inter Line Padding: "</string>
 </resources>
