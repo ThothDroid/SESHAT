@@ -6,6 +6,8 @@ import static com.blueapps.seshat.svg.parser.PathTransformer.mirrorPathVerticall
 import android.content.Context;
 import android.graphics.Rect;
 
+import androidx.annotation.ColorInt;
+
 import com.blueapps.maat.BoundCalculation;
 import com.blueapps.maat.BoundProperty;
 import com.blueapps.maat.ValuePair;
@@ -36,6 +38,7 @@ public class SVGCreator {
     public static final String SVG_XMLNS_VALUE = "http://www.w3.org/2000/svg";
     public static final String SVG_VIEWBOX_ATTRIBUTE = "viewBox";
     public static final String SVG_STYLE_ATTRIBUTE = "style";
+    public static final String SVG_CSS_BACKGROUND_COLOR = "background-color";
     public static final String SVG_TITLE_TAG = "title";
     public static final String SVG_DESC_TAG = "desc";
     public static final String SVG_ID_TAG = "id";
@@ -46,7 +49,10 @@ public class SVGCreator {
     public static final String SVG_HEIGHT_ATTRIBUTE = "height";
     public static final String SVG_FILL_ATTRIBUTE = "fill";
 
-    public static Document createSVG(Context context, Seshat seshat, String glyphX, BoundProperty property, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
+    public static Document createSVG(Context context, Seshat seshat, String glyphX, BoundProperty property,
+                                     String title, String description, boolean backgroundWithCSS,
+                                     boolean backgroundTransparent, @ColorInt int backgroundColor,
+                                     @ColorInt int primarySignColor) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
 
         // create Document
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -74,12 +80,12 @@ public class SVGCreator {
         // Set background
         if (!backgroundTransparent) {
             if (backgroundWithCSS) {
-                root.setAttribute(SVG_STYLE_ATTRIBUTE, "background-color: " + "blue" + ";");
+                root.setAttribute(SVG_STYLE_ATTRIBUTE, SVG_CSS_BACKGROUND_COLOR + ": " + String.format("#%06X", (0xFFFFFF & backgroundColor)) + ";");
             } else {
                 Element backgroundRect = svg.createElement(SVG_RECT_TAG);
                 backgroundRect.setAttribute(SVG_WIDTH_ATTRIBUTE, "100%");
                 backgroundRect.setAttribute(SVG_HEIGHT_ATTRIBUTE, "100%");
-                backgroundRect.setAttribute(SVG_FILL_ATTRIBUTE, "blue");
+                backgroundRect.setAttribute(SVG_FILL_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & backgroundColor)));
                 root.appendChild(backgroundRect);
             }
         }

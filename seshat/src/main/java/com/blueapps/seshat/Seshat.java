@@ -1,7 +1,10 @@
 package com.blueapps.seshat;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
+
+import androidx.annotation.ColorInt;
 
 import com.blueapps.maat.BoundProperty;
 import com.blueapps.seshat.svg.SVGCreator;
@@ -46,6 +49,8 @@ public class Seshat {
     private float signPadding = 10f;
     private float layoutSignPadding = 5f;
     private float interLinePadding = 25f;
+    private @ColorInt int backgroundColor = Color.WHITE;
+    private @ColorInt int primarySignColor = Color.BLACK;
 
     public Seshat(String GlyphX, Handler handler){
         this.glyphX = GlyphX;
@@ -62,7 +67,7 @@ public class Seshat {
             BoundProperty property = new BoundProperty(0, 0, textSize, verticalOrientation, writingDirection,
                     writingLayout, drawLines, lineThickness, pagePaddingLeft, pagePaddingTop,
                     pagePaddingRight, pagePaddingBottom, signPadding, layoutSignPadding, interLinePadding);
-            return SVGCreator.createSVG(context, this, glyphX, property, title, description, backgroundWithCSS, backgroundTransparent);
+            return SVGCreator.createSVG(context, this, glyphX, property, title, description, backgroundWithCSS, backgroundTransparent, backgroundColor, primarySignColor);
         } catch (ParserConfigurationException | XmlPullParserException | IOException |
                  SAXException e) {
             throw new RuntimeException(e);
@@ -217,6 +222,21 @@ public class Seshat {
         this.interLinePadding = interLinePadding;
     }
 
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(@ColorInt int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public int getPrimarySignColor() {
+        return primarySignColor;
+    }
+
+    public void setPrimarySignColor(@ColorInt int primarySignColor) {
+        this.primarySignColor = primarySignColor;
+    }
 
     public void addSeshatListener(SeshatListener listener){
         listeners.add(listener);

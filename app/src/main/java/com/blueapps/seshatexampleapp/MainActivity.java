@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
         // Define text color Button
         binding.changeTextColor.setOnClickListener(view -> {
-            //seshat.setPrimarySignColor(Colors[textColorCursor]);
+            seshat.setPrimarySignColor(Colors[textColorCursor]);
             binding.changeTextColor.setBackgroundColor(Colors[textColorCursor]);
             textColorCursor++;
             if (textColorCursor >= Colors.length){
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
         // Define bg color Button
         binding.changeBGColor.setOnClickListener(view -> {
-            //seshat.setBackgroundColor(Colors[bgColorCursor]);
+            seshat.setBackgroundColor(Colors[bgColorCursor]);
             binding.changeBGColor.setBackgroundColor(Colors[bgColorCursor]);
             bgColorCursor++;
             if (bgColorCursor >= Colors.length){
