@@ -51,11 +51,12 @@ public class Seshat {
     }
 
     public Document convertToSVGDocument(Context context, String title, String description) {
+        this.onExportStarted();
         try {
             BoundProperty property = new BoundProperty(0, 0, textSize, verticalOrientation, writingDirection,
                     writingLayout, drawLines, lineThickness, pagePaddingLeft, pagePaddingTop,
                     pagePaddingRight, pagePaddingBottom, signPadding, layoutSignPadding, interLinePadding);
-            return SVGCreator.createSVG(context, glyphX, property, title, description);
+            return SVGCreator.createSVG(context, this, glyphX, property, title, description);
         } catch (ParserConfigurationException | XmlPullParserException | IOException |
                  SAXException e) {
             throw new RuntimeException(e);
@@ -213,5 +214,23 @@ public class Seshat {
 
     public void addSeshatListener(SeshatListener listener){
         listeners.add(listener);
+    }
+
+    public void onExportStarted(){
+        for (SeshatListener listener : listeners) {
+            listener.onExportStarted();
+        }
+    }
+
+    public void onExportProgress(int progress, int total){
+        for (SeshatListener listener : listeners) {
+            listener.onExportProgress(progress, total);
+        }
+    }
+
+    public void onExportCompleted(){
+        for (SeshatListener listener : listeners) {
+            listener.onExportCompleted();
+        }
     }
 }
