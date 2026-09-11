@@ -110,7 +110,7 @@ public class SVGCreator {
         // set the viewBox attribute for the root element
         root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());
 
-        seshat.onExportCompleted();
+        seshat.onPostProcessingStarted();
 
         return svg;
     }

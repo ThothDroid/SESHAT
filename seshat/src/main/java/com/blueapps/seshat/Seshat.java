@@ -64,8 +64,7 @@ public class Seshat {
         this.handler = handler;
     }
 
-    public Document convertToSVGDocument(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
-        this.onExportStarted();
+    private Document createSVGDocument(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
         try {
             BoundProperty property = new BoundProperty(0, 0, textSize, verticalOrientation, writingDirection,
                     writingLayout, drawLines, lineThickness, pagePaddingLeft, pagePaddingTop,
@@ -77,16 +76,31 @@ public class Seshat {
         }
     }
 
+    public Document convertToSVGDocument(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
+        this.onExportStarted();
+        Document document = createSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent);
+        this.onExportCompleted();
+        return document;
+    }
+
+    private String createSVGString(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
+        return convertToXmlString(createSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent));
+    }
+
     public String convertToSVGString(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
-        return convertToXmlString(convertToSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent));
+        this.onExportStarted();
+        String svgString = createSVGString(context, title, description, backgroundWithCSS, backgroundTransparent);
+        this.onExportCompleted();
+        return svgString;
     }
 
     public void convertToPNGFile(Context context, File outputFile, int width, int height, int quality, boolean backgroundTransparent) {
-        String svgString = convertToSVGString(context, null, null, false, backgroundTransparent);
-        onPostProcessingStarted();
+        this.onExportStarted();
+        String svgString = createSVGString(context, null, null, false, backgroundTransparent);
         BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, quality, outputFile);
         try {
             bitmapCreator.createPNG();
+            this.onExportCompleted();
         } catch (SVGParseException | IOException e) {
             throw new RuntimeException(e);
         }
