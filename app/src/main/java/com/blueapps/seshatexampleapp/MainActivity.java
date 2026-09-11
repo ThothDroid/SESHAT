@@ -358,6 +358,11 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
     }
 
     @Override
+    public void onPostProcessingStarted() {
+
+    }
+
+    @Override
     public void onExportCompleted() {
         binding.progressBar.setVisibility(View.INVISIBLE);
         binding.progressText.setVisibility(View.INVISIBLE);

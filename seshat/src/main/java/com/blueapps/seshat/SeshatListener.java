@@ -6,6 +6,8 @@ public interface SeshatListener {
 
     void onExportProgress(int progress, int total);
 
+    void onPostProcessingStarted();
+
     void onExportCompleted();
 
 }
