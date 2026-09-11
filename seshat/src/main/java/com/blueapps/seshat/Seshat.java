@@ -81,6 +81,14 @@ public class Seshat {
         }
     }
 
+    /**
+     * Converts the provided GlyphX content to an SVG document.
+     * @param title content for the title element in the SVG document
+     * @param description content for the description element in the SVG document
+     * @param backgroundWithCSS if true, the background color will be set using CSS; if false, it will be set using a rect element with size 100% x 100%
+     * @param backgroundTransparent if true, the background will be transparent; if false, it will be filled with the specified background color
+     * @return the exported SVG document
+     */
     public Document convertToSVGDocument(String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
         this.onExportStarted();
         Document document = createSVGDocument(title, description, backgroundWithCSS, backgroundTransparent);
@@ -92,6 +100,14 @@ public class Seshat {
         return convertToXmlString(createSVGDocument(title, description, backgroundWithCSS, backgroundTransparent));
     }
 
+    /**
+     * Converts the provided GlyphX content to an SVG String to write it into a file.
+     * @param title content for the title element in the SVG document
+     * @param description content for the description element in the SVG document
+     * @param backgroundWithCSS if true, the background color will be set using CSS; if false, it will be set using a rect element with size 100% x 100%
+     * @param backgroundTransparent if true, the background will be transparent; if false, it will be filled with the specified background color
+     * @return the exported SVG document
+     */
     public String convertToSVGString(String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
         this.onExportStarted();
         String svgString = createSVGString(title, description, backgroundWithCSS, backgroundTransparent);
@@ -99,6 +115,15 @@ public class Seshat {
         return svgString;
     }
 
+    /**
+     * Converts the provided GlyphX content to a PNG file.
+     * @param outputFile the file to write the PNG image to
+     * @param width the width of the output image in pixels
+     * @param height the height of the output image in pixels
+     * @param quality the quality of the output image (0-100, where 100 is the best quality and 0 the smallest file size)
+     * @param backgroundTransparent whether the background should be transparent
+     * @param autoSizeRatio whether to automatically size the image based on the SVG dimensions. If enabled, the height will be calculated and overwritten based on the provided width and the aspect ratio of the SVG.
+     */
     public void convertToPNGFile(File outputFile, int width, int height, int quality, boolean backgroundTransparent, boolean autoSizeRatio) {
         this.onExportStarted();
         String svgString = createSVGString(null, null, false, backgroundTransparent);
@@ -115,6 +140,14 @@ public class Seshat {
         }
     }
 
+    /**
+     * Converts the provided GlyphX content to a JPEG file.
+     * @param outputFile the file to write the JPEG image to
+     * @param width the width of the output image in pixels
+     * @param height the height of the output image in pixels
+     * @param quality the quality of the output image (0-100, where 100 is the best quality and 0 the smallest file size)
+     * @param autoSizeRatio whether to automatically size the image based on the SVG dimensions. If enabled, the height will be calculated and overwritten based on the provided width and the aspect ratio of the SVG.
+     */
     public void convertToJPGFile(File outputFile, int width, int height, int quality, boolean autoSizeRatio) {
         this.onExportStarted();
         String svgString = createSVGString(null, null, false, false);
