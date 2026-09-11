@@ -40,4 +40,18 @@ public class BitmapCreator {
         }
     }
 
+    public void createJPG() throws SVGParseException, IOException {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        SVG svg = SVG.getFromString(stringSVG);
+        svg.renderToCanvas(canvas);
+
+        try (FileOutputStream out = new FileOutputStream(outputFile)){
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
+        } finally {
+            bitmap.recycle();
+        }
+    }
+
 }

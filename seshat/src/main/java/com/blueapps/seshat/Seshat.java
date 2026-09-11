@@ -106,6 +106,18 @@ public class Seshat {
         }
     }
 
+    public void convertToJPGFile(Context context, File outputFile, int width, int height, int quality, boolean backgroundTransparent) {
+        this.onExportStarted();
+        String svgString = createSVGString(context, null, null, false, backgroundTransparent);
+        BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, quality, outputFile);
+        try {
+            bitmapCreator.createJPG();
+            this.onExportCompleted();
+        } catch (SVGParseException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Document convertToXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
