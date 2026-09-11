@@ -65,7 +65,45 @@ But for Thread safety, you should pass in the Handler of the `UI-Thread`, so tha
 even when the exporting is happening on another Thread. Of course, you can also provide a Handler of a different Thread.<br>
 If you are a beginner, leave it like in the example.
 
+You can also provide the `GlyphX`-String now:
+```
+Seshat seshat = new Seshat(context, glyphX, new Handler(context.getMainLooper()));
+```
 
+Second, you set the export settings. You can manipulate each setting by a setter-function. Values you do not manipulate remain on the defaults.
+
+> [!IMPORTANT]
+> If you haven't done it already, last chance to set the `GlyphX` string via `setGlyphX(String glyphX)`
+
+Now you can add a `SeshatListener`, to get updates about how the export process is going:
+```
+seshat.addSeshatListener(this);     // Please make shure, to implement the Interface
+```
+It has these methods:
+- `onExportStarted()`: When the export process started. If you use a progressbar, then you should display it now.
+- `onExportProgress(int progress, int total)`: Called multiple times during export. `progress` represents the completed steps, while `total` represents all steps needed. Please make this function fast and efficient, because it can slow down rendering.
+- `onPostProcessingStarted()`: When the Post processing started (For example the rasterization). If you use a progress bar, set it into intermediate mode.
+- `onExportCompleted()`: When the export is finished. Now you can hide the progressbar.
+
+Finally, you can start the export process. It is recommended to do it in a separated Thread. Do not panic, you can still update UI-Components inside the Listener.
+```
+new Thread(() -> {
+    // If you want to export into a SVG String (To write it into a file)
+    String SVGString = seshat.convertToSVGString(title, description, cssBackground, backgroundTransparent);
+    // If you want to export into a SVG Document
+    Document SVGDocument = seshat.convertToSVGDocument(title, description, cssBackground, backgroundTransparent);
+    
+    // If you want to export into a PNG File
+    File outputFile = new File(this.getFilesDir(), "output.png");   // Make shure you have the permission, to access the file path
+    seshat.convertToPNGFile(outputFile, width, height, quality, backgroundTransparent, autoSizeRatio);
+    
+    // If you want to export into a JPEG File
+    File outputFile = new File(this.getFilesDir(), "output.jpg");   // Make shure you have the permission, to access the file path
+    seshat.convertToJPGFile(outputFile, width, height, quality, autoSizeRatio);
+}).start();
+```
+
+The exported file is on the provided file path, or returned directly by the function.
 
 ### export settings
 Most of the settings come from the `BoundProperty` of the [`MAAT`](https://github.com/ThothDroid/MAAT)-Library, which calculates the positions of the signs.
@@ -111,45 +149,3 @@ Here I will explain all the possible export settings:
 #### PNG settings
 Mostly the same as the JPEG settings, but with the `backgroundTransparent` setting from SVG.
 
-### Changing values at runtime
-To change the Attributes during runtime, you can call the `getter` and `setter` for the values. For example:
-```
-binding.thothView.setTextSize(200);     // Set the value for the textSize in pixels
-```
-
-You can also use some other functions which are explained here:
-
-- `getGlyphXText()`: Returns the hieroglyphic text as `GlyphX`-String.
-- `getMdCText()`: Returns the hieroglyphic text as `MdC`-String.
-- `isAltTextTested()`: Returns whether the view is in `AltTextTesting`-Mode or not.
-- `getLineThickness()`: Returns the thickness of the lines drawn between the columns / lines of the text in pixels
-- `isDrawLines()`: Returns whether there should be lines drawn between the columns / lines of the text
-- `getPagePaddingLeft()`: Returns the left padding of the text as a whole
-- `getPagePaddingTop()`: Returns the top padding of the text as a whole
-- `getPagePaddingRight()`: Returns the right padding of the text as a whole
-- `getPagePaddingBottom()`: Returns the bottom padding of the text as a whole
-- `getSignPadding()`: Returns the padding between signs outside of groups
-- `getLayoutSignPadding()`: Returns the padding between signs inside a group
-- `getInterLinePadding()`: Returns the padding between the lines / columns of the text
-
-- `setGlyphXText(String glyphX)`: Change the hieroglyphic text during runtime by transferring the text as `GlyphX`-String.
-- `setGlyphXText(org.w3c.dom.Document glyphX)`: Change the hieroglyphic text during runtime by transferring the text as `GlyphX`-XML-Document.
-- `setMdCText(String mdc)`: Change the hieroglyphic text during runtime by transferring the text as `MdC`-String.
-- `testAltText(boolean b)`: Enable or disable `AltTextTesting`-Mode. If `AltTextTesting`-Mode is enabled, the hieroglyph will not be rendered
-  and the view will act like if the hieroglyphs are currently loaded into memory. This is useful for testing how the alternative text looks like.
-- `setLineThickness(float lineThickness)`: Sets the thickness of the lines drawn between the columns / lines of the text in pixels
-- `setDrawLines(boolean drawLines)`: Determines if there should be drawn lines between the columns / lines of the text
-- `setPagePaddingLeft(float pagePaddingLeft)`: Sets the left padding of the text as a whole
-- `setPagePaddingTop(float pagePaddingTop)`: Sets the top padding of the text as a whole
-- `setPagePaddingRight(float pagePaddingRight)`: Sets the right padding of the text as a whole
-- `setPagePaddingBottom(float pagePaddingBottom)`: Sets the bottom padding of the text as a whole
-- `setSignPadding(float signPadding)`: Sets the padding between signs outside of groups
-- `setLayoutSignPadding(float layoutSignPadding)`: Sets the padding between signs inside a group
-- `setInterLinePadding(float interLinePadding)`: Sets the padding between the lines / columns of the text
-
-> [!NOTE]
-> Currently the lines between the columns / lines of the texts are not drawn
-
-> [!NOTE]
-> Currently the view isn't displaying the alternative text correctly.\
-> Especially when the `altTextSize` is very big, the text is not centered vertically.
