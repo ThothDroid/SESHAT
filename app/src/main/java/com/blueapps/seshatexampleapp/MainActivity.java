@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.AdapterView;
 import android.widget.SeekBar;
 import android.os.Handler;
 import android.view.View;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
     private boolean cssBackground = false;
     private boolean backgroundTransparent = true;
+    private int fileType = 0;
 
     private static final int[] Colors = {Color.BLACK, Color.WHITE, Color.GRAY, Color.CYAN, Color.MAGENTA, Color.YELLOW};
     private int textColorCursor = 0;
@@ -67,6 +69,25 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 exportContent = seshat.convertToSVGString(this, "Test", "Test description", cssBackground, backgroundTransparent);
                 startSAF(activityResultLauncher);
             }).start();
+        });
+
+        binding.fileType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                fileType = i;
+                if (i == 0){
+                    binding.backgroundWithCSS.setVisibility(View.VISIBLE);
+                } else if (i == 1){
+                    binding.backgroundWithCSS.setVisibility(View.GONE);
+                } else {
+                    binding.backgroundWithCSS.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
 
         // Define verticalOrientation RadioGroup
