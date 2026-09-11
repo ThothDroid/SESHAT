@@ -22,11 +22,10 @@ public class SVGPath {
     
     private static final String TAG = "SVGPath";
     
-    private ArrayList<Command> commands = new ArrayList<>();
+    private final ArrayList<Command> commands = new ArrayList<>();
     
     public SVGPath(String path){
         // parse path
-
         // Split String on commands
         ArrayList<String> stringCommands = new ArrayList<>(Arrays.asList(path.split("(?=[a-zA-Z])")));
         Log.d(TAG, stringCommands.toString());
@@ -63,6 +62,10 @@ public class SVGPath {
         for (Command command: commands){
             command.applyTransformation(sx, sy, tx, ty);
         }
+    }
+
+    public void mirrorVertically(){
+        //
     }
 
     @NonNull

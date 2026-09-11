@@ -25,9 +25,10 @@ public class PathTransformer {
 
     public static String mirrorPathVertically(String path){
 
-        //
+        SVGPath svgPath = new SVGPath(path);
+        svgPath.mirrorVertically();
 
-        return path;
+        return svgPath.toString();
 
     }
 
