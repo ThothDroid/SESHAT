@@ -149,3 +149,10 @@ Here I will explain all the possible export settings:
 #### PNG settings
 Mostly the same as the JPEG settings, but with the `backgroundTransparent` setting from SVG.
 
+## Version Catalog
+> [!IMPORTANT]
+> The version catalog uses this versioning system: [see here](https://medium.com/@wassimsakri/the-ultimate-guide-to-versioning-in-software-development-e846eb292a0d).
+### 11.09.2026@1.0.0
+First release of the library. Supports `GlyphX` import and `SVG`, `PNG` and `JPEG` export.
+### latest Version
+`11.09.2026@1.0.0`
