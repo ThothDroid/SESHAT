@@ -27,8 +27,10 @@ import com.blueapps.seshat.Seshat;
 import com.blueapps.seshat.SeshatListener;
 import com.blueapps.seshatexampleapp.databinding.ActivityMainBinding;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 public class MainActivity extends AppCompatActivity implements ActivityResultCallback<ActivityResult> , SeshatListener {
 
@@ -66,7 +68,12 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             new Thread(() -> {
                 seshat.setGlyphX(binding.input.getText().toString());
                 seshat.addSeshatListener(MainActivity.this);
-                exportContent = seshat.convertToSVGString(this, "Test", "Test description", cssBackground, backgroundTransparent);
+                if (fileType == 0) {
+                    exportContent = seshat.convertToSVGString(this, "Test", "Test description", cssBackground, backgroundTransparent);
+                } else if (fileType == 1) {
+                    File cacheFile = new File(this.getCacheDir(), "temp_file.png");
+                    seshat.convertToPNGFile(this, cacheFile, 800, 800, 0, backgroundTransparent);
+                }
                 startSAF(activityResultLauncher);
             }).start();
         });
@@ -329,10 +336,17 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
         // Start SAF
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.setType("image/svg+xml");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/svg+xml"});
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.putExtra(Intent.EXTRA_TITLE, "test.svg");
+        if (fileType == 0) {
+            intent.setType("image/svg+xml");
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/svg+xml"});
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.putExtra(Intent.EXTRA_TITLE, "test.svg");
+        } else if (fileType == 1) {
+            intent.setType("image/png");
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/png"});
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.putExtra(Intent.EXTRA_TITLE, "test.png");
+        }
         activityResultLauncher.launch(intent);
 
     }
@@ -355,11 +369,25 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             if (data != null) {
                 Uri uri = data.getData();
                 if (uri != null) {
-                    try {
-                        writeFile(getContentResolver(), uri, exportContent);
-                        exportContent = "";
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    if (fileType == 0) {
+                        try {
+                            writeFile(getContentResolver(), uri, exportContent);
+                            exportContent = "";
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else if (fileType == 1) {
+                        // For PNG, we already saved the file in cache, now we need to copy it to the selected URI
+                        File cacheFile = new File(this.getCacheDir(), "temp_file.png");
+                        try (OutputStream outputStream = getContentResolver().openOutputStream(uri)) {
+                            if (outputStream != null) {
+                                Files.copy(cacheFile.toPath(), outputStream);
+                            } else {
+                                throw new IOException("Unable to open OutputStream for URI: " + uri);
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             }
