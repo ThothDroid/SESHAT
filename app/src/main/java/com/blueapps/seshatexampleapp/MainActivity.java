@@ -100,11 +100,11 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
     @Override
     public void onExportStarted() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        binding.progressText.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onExportProgress(int progress, int total) {
+        binding.progressText.setVisibility(View.VISIBLE);
         binding.progressText.setText(progress + "/" + total + " " + (int) ((float) progress / total * 100) + "%");
         binding.progressBar.setProgress((int) ((float) progress / total * 100));
     }
