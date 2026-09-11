@@ -84,7 +84,8 @@ public class SVGCreator {
     private static BoundCalculation attachSignChildren(Context context, Seshat seshat, Document svg, Element root, Document document, BoundProperty property) throws XmlPullParserException, IOException, SAXException {
         BoundCalculation boundCalculation = new BoundCalculation(document);
         ArrayList<String> ids = boundCalculation.getIds(false, false);
-        int total = ids.size();
+        int total = ids.size() * 2; // multiply by 2 to account for both path and bounds processing
+        int exportCounter = 1;
 
         ArrayList<String> paths = new ArrayList<>();
         ArrayList<ValuePair<Float, Float>> dimensions = new ArrayList<>();
@@ -108,6 +109,8 @@ public class SVGCreator {
                     throw new RuntimeException(" Width or Height is null for id: " + id);
                 }
             }
+            seshat.onExportProgress(exportCounter, total);
+            exportCounter++;
         }
 
         ArrayList<Rect> bounds = boundCalculation.getBounds(dimensions, property);
@@ -128,7 +131,8 @@ public class SVGCreator {
             path.setAttribute(SVG_PATH_ATTRIBUTE_D, signPath);
             // add the <path> element to the root element
             root.appendChild(path);
-            seshat.onExportProgress(counter, total);
+            seshat.onExportProgress(exportCounter, total);
+            exportCounter++;
             counter++;
         }
 
