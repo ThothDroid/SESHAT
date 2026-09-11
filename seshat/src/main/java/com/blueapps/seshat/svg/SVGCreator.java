@@ -48,11 +48,16 @@ public class SVGCreator {
     public static final String SVG_WIDTH_ATTRIBUTE = "width";
     public static final String SVG_HEIGHT_ATTRIBUTE = "height";
     public static final String SVG_FILL_ATTRIBUTE = "fill";
+    public static final String SVG_LINE_TAG = "line";
+    public static final String SVG_LINE_ATTRIBUTE_X1 = "x1";
+    public static final String SVG_LINE_ATTRIBUTE_Y1 = "y1";
+    public static final String SVG_LINE_ATTRIBUTE_X2 = "x2";
+    public static final String SVG_LINE_ATTRIBUTE_Y2 = "y2";
 
     public static Document createSVG(Context context, Seshat seshat, String glyphX, BoundProperty property,
                                      String title, String description, boolean backgroundWithCSS,
                                      boolean backgroundTransparent, @ColorInt int backgroundColor,
-                                     @ColorInt int primarySignColor) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
+                                     @ColorInt int primarySignColor, boolean roundLineCap) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
 
         // create Document
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -96,6 +101,20 @@ public class SVGCreator {
 
         // add sign tags
         BoundCalculation boundCalculation = attachSignChildren(context, seshat, svg, root, document, property, primarySignColor);
+
+        // Add lines
+        if (property.areLinesDrawn()){
+            Element lineElement = svg.createElement(SVG_LINE_TAG);
+            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X1, String.valueOf(property.getPagePaddingLeft()));
+            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y1, String.valueOf(property.getPagePaddingTop()));
+            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X2, String.valueOf(boundCalculation.getWidth() - property.getPagePaddingRight()));
+            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y2, String.valueOf(property.getPagePaddingTop()));
+            lineElement.setAttribute(SVG_FILL_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
+            if (roundLineCap) {
+                lineElement.setAttribute("stroke-linecap", "round");
+            }
+            root.appendChild(lineElement);
+        }
 
         // set the viewBox attribute for the root element
         root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());

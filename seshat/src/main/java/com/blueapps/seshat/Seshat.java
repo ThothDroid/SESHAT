@@ -41,6 +41,7 @@ public class Seshat {
     private int writingDirection = BoundProperty.WRITING_DIRECTION_LTR;
     private int writingLayout = BoundProperty.WRITING_LAYOUT_LINES;
     private boolean drawLines = false;
+    private boolean roundLineCap = true;
     private float lineThickness = 2f;
     private float pagePaddingLeft = 0f;
     private float pagePaddingTop = 0f;
@@ -67,7 +68,7 @@ public class Seshat {
             BoundProperty property = new BoundProperty(0, 0, textSize, verticalOrientation, writingDirection,
                     writingLayout, drawLines, lineThickness, pagePaddingLeft, pagePaddingTop,
                     pagePaddingRight, pagePaddingBottom, signPadding, layoutSignPadding, interLinePadding);
-            return SVGCreator.createSVG(context, this, glyphX, property, title, description, backgroundWithCSS, backgroundTransparent, backgroundColor, primarySignColor);
+            return SVGCreator.createSVG(context, this, glyphX, property, title, description, backgroundWithCSS, backgroundTransparent, backgroundColor, primarySignColor, roundLineCap);
         } catch (ParserConfigurationException | XmlPullParserException | IOException |
                  SAXException e) {
             throw new RuntimeException(e);
@@ -156,6 +157,14 @@ public class Seshat {
 
     public void setDrawLines(boolean drawLines) {
         this.drawLines = drawLines;
+    }
+
+    public boolean isRoundLineCap() {
+        return roundLineCap;
+    }
+
+    public void setRoundLineCap(boolean roundLineCap) {
+        this.roundLineCap = roundLineCap;
     }
 
     public float getLineThickness() {
