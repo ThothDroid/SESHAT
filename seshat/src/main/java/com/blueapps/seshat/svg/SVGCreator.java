@@ -48,6 +48,8 @@ public class SVGCreator {
     public static final String SVG_WIDTH_ATTRIBUTE = "width";
     public static final String SVG_HEIGHT_ATTRIBUTE = "height";
     public static final String SVG_FILL_ATTRIBUTE = "fill";
+    public static final String SVG_STROKE_ATTRIBUTE = "stroke";
+    public static final String SVG_STROKE_WIDTH_ATTRIBUTE = "stroke-width";
     public static final String SVG_LINE_TAG = "line";
     public static final String SVG_LINE_ATTRIBUTE_X1 = "x1";
     public static final String SVG_LINE_ATTRIBUTE_Y1 = "y1";
@@ -109,7 +111,8 @@ public class SVGCreator {
             lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y1, String.valueOf(property.getPagePaddingTop()));
             lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X2, String.valueOf(boundCalculation.getWidth() - property.getPagePaddingRight()));
             lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y2, String.valueOf(property.getPagePaddingTop()));
-            lineElement.setAttribute(SVG_FILL_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
+            lineElement.setAttribute(SVG_STROKE_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
+            lineElement.setAttribute(SVG_STROKE_WIDTH_ATTRIBUTE, String.valueOf(property.getLineThickness()));
             if (roundLineCap) {
                 lineElement.setAttribute("stroke-linecap", "round");
             }
