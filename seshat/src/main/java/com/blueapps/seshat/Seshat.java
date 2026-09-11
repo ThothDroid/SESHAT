@@ -7,6 +7,7 @@ import android.os.Handler;
 import androidx.annotation.ColorInt;
 
 import com.blueapps.maat.BoundProperty;
+import com.blueapps.seshat.bitmap.PNGCreator;
 import com.blueapps.seshat.svg.SVGCreator;
 
 import org.w3c.dom.Document;
@@ -14,6 +15,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -77,6 +79,12 @@ public class Seshat {
 
     public String convertToSVGString(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
         return convertToXmlString(convertToSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent));
+    }
+
+    public void convertToPNGFile(Context context, File outputFile, boolean backgroundTransparent) {
+        String svgString = convertToSVGString(context, null, null, false, backgroundTransparent);
+        PNGCreator pngCreator = new PNGCreator(svgString, 800, 800, outputFile);
+        pngCreator.createPNG();
     }
 
     public static Document convertToXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {

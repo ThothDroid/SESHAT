@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.glyphconverter)
     implementation(libs.signprovider);
     implementation(libs.commons.lang3)
+    implementation(libs.androidsvg.aar)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
