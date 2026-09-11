@@ -29,8 +29,8 @@ import javax.xml.transform.stream.StreamResult;
 public class Seshat {
 
     private String glyphX = "";
-    private ArrayList<SeshatListener> listeners = new ArrayList<>();
-    private Handler handler;
+    private final ArrayList<SeshatListener> listeners = new ArrayList<>();
+    private final Handler handler;
 
     // basic properties
     private float textSize = 100f;
