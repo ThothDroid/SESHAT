@@ -55,11 +55,11 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), this);
 
-        seshat = new Seshat();
+        seshat = new Seshat(new Handler(getMainLooper()));
 
         binding.buttonExport.setOnClickListener(v -> {
             new Thread(() -> {
-                seshat.setGlyphX(binding.input.getText().toString(), new Handler(getMainLooper()));
+                seshat.setGlyphX(binding.input.getText().toString());
                 seshat.addSeshatListener(MainActivity.this);
                 exportContent = seshat.convertToSVGString(this, "Test", "Test description");
                 startSAF(activityResultLauncher);

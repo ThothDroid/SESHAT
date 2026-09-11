@@ -52,7 +52,9 @@ public class Seshat {
         this.handler = handler;
     }
 
-    public Seshat(){}
+    public Seshat(Handler handler){
+        this.handler = handler;
+    }
 
     public Document convertToSVGDocument(Context context, String title, String description) {
         this.onExportStarted();
