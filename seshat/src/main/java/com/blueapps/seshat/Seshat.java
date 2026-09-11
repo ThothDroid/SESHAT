@@ -13,6 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,6 +26,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 public class Seshat {
+
+    private ArrayList<SeshatListener> listeners = new ArrayList<>();
 
     private String glyphX;
 
@@ -205,5 +208,10 @@ public class Seshat {
 
     public void setInterLinePadding(float interLinePadding) {
         this.interLinePadding = interLinePadding;
+    }
+
+
+    public void addSeshatListener(SeshatListener listener){
+        listeners.add(listener);
     }
 }
