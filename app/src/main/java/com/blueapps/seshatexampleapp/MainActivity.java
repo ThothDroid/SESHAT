@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
     private String exportContent = "";
     private Seshat seshat;
 
+    private boolean cssBackground = false;
+    private boolean backgroundTransparent = true;
+
     private static final int[] Colors = {Color.BLACK, Color.WHITE, Color.GRAY, Color.CYAN, Color.MAGENTA, Color.YELLOW};
     private int textColorCursor = 0;
     private int bgColorCursor = 0;
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             new Thread(() -> {
                 seshat.setGlyphX(binding.input.getText().toString());
                 seshat.addSeshatListener(MainActivity.this);
-                exportContent = seshat.convertToSVGString(this, "Test", "Test description", true, false);
+                exportContent = seshat.convertToSVGString(this, "Test", "Test description", cssBackground, backgroundTransparent);
                 startSAF(activityResultLauncher);
             }).start();
         });
@@ -138,6 +141,16 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             if (bgColorCursor >= Colors.length){
                 bgColorCursor = 0;
             }
+        });
+
+        // Define CSSBackground CheckBox
+        binding.backgroundWithCSS.setOnCheckedChangeListener((compoundButton, b) -> {
+            cssBackground = b;
+        });
+
+        // Define Transparent Background CheckBox
+        binding.transparentBackground.setOnCheckedChangeListener((compoundButton, b) -> {
+            backgroundTransparent = b;
         });
 
         // Lines
