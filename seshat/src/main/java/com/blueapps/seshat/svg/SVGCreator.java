@@ -68,6 +68,7 @@ public class SVGCreator {
         InputStream inputStream = new ByteArrayInputStream(glyphX.getBytes(StandardCharsets.UTF_8));
         Document document = builder.parse(inputStream);
 
+        // add sign tags
         BoundCalculation boundCalculation = attachSignChildren(context, svg, root, document, property);
 
         // set the viewBox attribute for the root element
