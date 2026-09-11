@@ -65,7 +65,9 @@ public class SVGPath {
     }
 
     public void mirrorVertically(float width){
-        //
+        for (Command command: commands){
+            command.mirrorVertically(width);
+        }
     }
 
     @NonNull

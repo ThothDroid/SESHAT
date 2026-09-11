@@ -17,4 +17,7 @@ public class ZCommand extends Command {
 
     @Override
     public void applyTransformation(float sx, float sy, float tx, float ty) {}
+
+    @Override
+    public void mirrorVertically(float width) {}
 }

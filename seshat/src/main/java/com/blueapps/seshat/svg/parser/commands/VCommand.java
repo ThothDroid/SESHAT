@@ -22,4 +22,9 @@ public class VCommand extends Command {
         }
 
     }
+
+    @Override
+    public void mirrorVertically(float width){
+        // V command doesn't have x coordinates, so no need to mirror
+    }
 }

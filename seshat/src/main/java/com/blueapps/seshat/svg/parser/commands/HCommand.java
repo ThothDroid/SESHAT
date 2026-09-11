@@ -22,4 +22,18 @@ public class HCommand extends Command {
         }
 
     }
+
+    @Override
+    public void mirrorVertically(float width){
+        int counter = 0;
+        for (float value: values){
+            if (relative) {
+                value *= -1;
+            } else {
+                value = width - value;
+            }
+            values.set(counter, value);
+            counter++;
+        }
+    }
 }

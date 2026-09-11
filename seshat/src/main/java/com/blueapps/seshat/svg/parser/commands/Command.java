@@ -67,6 +67,22 @@ public class Command {
         }
     }
 
+    public void mirrorVertically(float width){
+        int counter = 0;
+        for (float value: values){
+            if (counter % 2 == 0){
+                // x coordinate
+                if (relative) {
+                    value *= -1;
+                } else {
+                    value = width - value;
+                }
+            }
+            values.set(counter, value);
+            counter++;
+        }
+    }
+
     @NonNull
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
