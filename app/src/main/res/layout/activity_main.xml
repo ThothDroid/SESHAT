@@ -200,26 +200,55 @@
 
             </LinearLayout>
 
-            <RadioGroup
-                android:id="@+id/WritingDirection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/ltr"
+                <RadioGroup
+                    android:id="@+id/WritingDirection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp">
+
+                    <RadioButton
+                        android:id="@+id/ltr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/writing_direction_ltr" />
+
+                    <RadioButton
+                        android:id="@+id/rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/writing_direction_rtl" />
+                </RadioGroup>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/writing_direction_ltr" />
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/rtl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/writing_direction_rtl" />
-            </RadioGroup>
+                    <CheckBox
+                        android:id="@+id/backgroundWithCSS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:text="@string/css_background" />
+
+                    <CheckBox
+                        android:id="@+id/transparentBackground"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/transparent_background" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/paddingTitle"

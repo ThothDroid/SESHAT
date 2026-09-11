@@ -25,4 +25,6 @@
     <string name="sign_padding_title">"Sign Padding: "</string>
     <string name="layout_sign_padding_title">"Layout Sign Padding: "</string>
     <string name="inter_line_padding">"Inter Line Padding: "</string>
+    <string name="css_background">CSS background</string>
+    <string name="transparent_background">transparent background</string>
 </resources>
