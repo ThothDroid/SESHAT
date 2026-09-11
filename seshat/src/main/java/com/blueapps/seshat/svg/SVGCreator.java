@@ -105,19 +105,7 @@ public class SVGCreator {
         BoundCalculation boundCalculation = attachSignChildren(context, seshat, svg, root, document, property, primarySignColor);
 
         // Add lines
-        if (property.areLinesDrawn()){
-            Element lineElement = svg.createElement(SVG_LINE_TAG);
-            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X1, String.valueOf(property.getPagePaddingLeft()));
-            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y1, String.valueOf(property.getPagePaddingTop()));
-            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X2, String.valueOf(boundCalculation.getWidth() - property.getPagePaddingRight()));
-            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y2, String.valueOf(property.getPagePaddingTop()));
-            lineElement.setAttribute(SVG_STROKE_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
-            lineElement.setAttribute(SVG_STROKE_WIDTH_ATTRIBUTE, String.valueOf(property.getLineThickness()));
-            if (roundLineCap) {
-                lineElement.setAttribute("stroke-linecap", "round");
-            }
-            root.appendChild(lineElement);
-        }
+        if (property.areLinesDrawn()) addLines(svg, property, boundCalculation.getWidth(), boundCalculation.getHeight(), root, primarySignColor, roundLineCap);
 
         // set the viewBox attribute for the root element
         root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());
@@ -125,6 +113,24 @@ public class SVGCreator {
         seshat.onExportCompleted();
 
         return svg;
+    }
+
+    private static void addLines(Document svg, BoundProperty property, float width, float height, Element root, @ColorInt int primarySignColor, boolean roundLineCap) {
+        float textLineHeight = property.getTextSize() + property.getInterLinePadding() + property.getLineThickness();
+        float halfInterTextSpace = (property.getInterLinePadding() + property.getLineThickness()) / 2;
+        for (float y = property.getPagePaddingTop() + textLineHeight; y < height - property.getPagePaddingBottom(); y += textLineHeight) {
+            Element lineElement = svg.createElement(SVG_LINE_TAG);
+            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X1, String.valueOf(property.getPagePaddingLeft()));
+            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y1, String.valueOf(y - halfInterTextSpace));
+            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X2, String.valueOf(width - property.getPagePaddingRight()));
+            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y2, String.valueOf(y - halfInterTextSpace));
+            lineElement.setAttribute(SVG_STROKE_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
+            lineElement.setAttribute(SVG_STROKE_WIDTH_ATTRIBUTE, String.valueOf(property.getLineThickness()));
+            if (roundLineCap) {
+                lineElement.setAttribute("stroke-linecap", "round");
+            }
+            root.appendChild(lineElement);
+        }
     }
 
     private static BoundCalculation attachSignChildren(Context context, Seshat seshat, Document svg, Element root, Document document, BoundProperty property, @ColorInt int primarySignColor) throws XmlPullParserException, IOException, SAXException {
