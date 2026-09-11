@@ -12,7 +12,6 @@ import com.blueapps.maat.BoundCalculation;
 import com.blueapps.maat.BoundProperty;
 import com.blueapps.maat.ValuePair;
 import com.blueapps.seshat.Seshat;
-import com.blueapps.seshat.SeshatListener;
 import com.blueapps.signprovider.SignProvider;
 import com.blueapps.signprovider.SvgData;
 import org.w3c.dom.Document;
@@ -31,6 +30,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 public class SVGCreator {
+
+    private Context context;
+    private Seshat seshat;
+
+    private float width;
+    private float height;
+    private Element root;
+    private Document glyphXDocument;
+    private Document svg;
 
     // Constants for SVG
     public static final String SVG_ROOT_TAG = "svg";
@@ -56,7 +64,12 @@ public class SVGCreator {
     public static final String SVG_LINE_ATTRIBUTE_X2 = "x2";
     public static final String SVG_LINE_ATTRIBUTE_Y2 = "y2";
 
-    public static Document createSVG(Context context, Seshat seshat, String glyphX, BoundProperty property,
+    public SVGCreator(Context context, Seshat seshat) {
+        this.context = context;
+        this.seshat = seshat;
+    }
+
+    public Document createSVG(String glyphX, BoundProperty property,
                                      String title, String description, boolean backgroundWithCSS,
                                      boolean backgroundTransparent, @ColorInt int backgroundColor,
                                      @ColorInt int primarySignColor, boolean roundLineCap) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
@@ -64,10 +77,10 @@ public class SVGCreator {
         // create Document
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document svg = builder.newDocument();
+        svg = builder.newDocument();
 
         // create root element
-        Element root = svg.createElement(SVG_ROOT_TAG);
+        root = svg.createElement(SVG_ROOT_TAG);
         svg.appendChild(root);
         // set the xmlns attribute for the root element
         root.setAttribute(SVG_XMLNS_ATTRIBUTE, SVG_XMLNS_VALUE);
@@ -99,13 +112,16 @@ public class SVGCreator {
 
         // Convert String to XmlDocument
         InputStream inputStream = new ByteArrayInputStream(glyphX.getBytes(StandardCharsets.UTF_8));
-        Document document = builder.parse(inputStream);
+        glyphXDocument = builder.parse(inputStream);
 
         // add sign tags
-        BoundCalculation boundCalculation = attachSignChildren(context, seshat, svg, root, document, property, primarySignColor);
+        BoundCalculation boundCalculation = attachSignChildren(property, primarySignColor);
+
+        width = boundCalculation.getWidth();
+        height = boundCalculation.getHeight();
 
         // Add lines
-        if (property.areLinesDrawn()) addLines(svg, property, boundCalculation.getWidth(), boundCalculation.getHeight(), root, primarySignColor, roundLineCap);
+        if (property.areLinesDrawn()) addLines(property, primarySignColor, roundLineCap);
 
         // set the viewBox attribute for the root element
         root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());
@@ -115,7 +131,7 @@ public class SVGCreator {
         return svg;
     }
 
-    private static void addLines(Document svg, BoundProperty property, float width, float height, Element root, @ColorInt int primarySignColor, boolean roundLineCap) {
+    private void addLines(BoundProperty property, @ColorInt int primarySignColor, boolean roundLineCap) {
         if (property.getWritingLayout() == BoundProperty.WRITING_LAYOUT_LINES) {
             float textLineHeight = property.getTextSize() + property.getInterLinePadding() + property.getLineThickness();
             float halfInterTextSpace = (property.getInterLinePadding() + property.getLineThickness()) / 2;
@@ -151,8 +167,8 @@ public class SVGCreator {
         }
     }
 
-    private static BoundCalculation attachSignChildren(Context context, Seshat seshat, Document svg, Element root, Document document, BoundProperty property, @ColorInt int primarySignColor) throws XmlPullParserException, IOException, SAXException {
-        BoundCalculation boundCalculation = new BoundCalculation(document);
+    private BoundCalculation attachSignChildren(BoundProperty property, @ColorInt int primarySignColor) throws XmlPullParserException, IOException, SAXException {
+        BoundCalculation boundCalculation = new BoundCalculation(glyphXDocument);
         ArrayList<String> ids = boundCalculation.getIds(false, false);
         int total = ids.size() * 2; // multiply by 2 to account for both path and bounds processing
         int exportCounter = 1;
