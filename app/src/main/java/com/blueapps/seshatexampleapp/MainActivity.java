@@ -65,20 +65,20 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), this);
 
-        seshat = new Seshat(new Handler(getMainLooper()));
+        seshat = new Seshat(this, new Handler(getMainLooper()));
 
         binding.buttonExport.setOnClickListener(v -> {
             new Thread(() -> {
                 seshat.setGlyphX(binding.input.getText().toString());
                 seshat.addSeshatListener(MainActivity.this);
                 if (fileType == 0) {
-                    exportContent = seshat.convertToSVGString(this, "Test", "Test description", cssBackground, backgroundTransparent);
+                    exportContent = seshat.convertToSVGString("Test", "Test description", cssBackground, backgroundTransparent);
                 } else if (fileType == 1) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.png");
-                    seshat.convertToPNGFile(this, cacheFile, width, height, quality, backgroundTransparent);
+                    seshat.convertToPNGFile(cacheFile, width, height, quality, backgroundTransparent, true);
                 } else if (fileType == 2) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.jpg");
-                    seshat.convertToJPGFile(this, cacheFile, width, height, quality);
+                    seshat.convertToJPGFile(cacheFile, width, height, quality, true);
                 }
                 startSAF(activityResultLauncher);
             }).start();

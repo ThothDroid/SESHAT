@@ -36,6 +36,8 @@ public class Seshat {
     private String glyphX = "";
     private final ArrayList<SeshatListener> listeners = new ArrayList<>();
     private final Handler handler;
+    private final Context context;
+    private SVGCreator svgCreator;
 
     // basic properties
     private float textSize = 100f;
@@ -55,48 +57,51 @@ public class Seshat {
     private @ColorInt int backgroundColor = Color.WHITE;
     private @ColorInt int primarySignColor = Color.BLACK;
 
-    public Seshat(String GlyphX, Handler handler){
+    public Seshat(Context context, String GlyphX, Handler handler){
+        this.context = context;
         this.glyphX = GlyphX;
         this.handler = handler;
     }
 
-    public Seshat(Handler handler){
+    public Seshat(Context context, Handler handler){
+        this.context = context;
         this.handler = handler;
     }
 
-    private Document createSVGDocument(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
+    private Document createSVGDocument(String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
         try {
+            svgCreator = new SVGCreator(context, this);
             BoundProperty property = new BoundProperty(0, 0, textSize, verticalOrientation, writingDirection,
                     writingLayout, drawLines, lineThickness, pagePaddingLeft, pagePaddingTop,
                     pagePaddingRight, pagePaddingBottom, signPadding, layoutSignPadding, interLinePadding);
-            return SVGCreator.createSVG(context, this, glyphX, property, title, description, backgroundWithCSS, backgroundTransparent, backgroundColor, primarySignColor, roundLineCap);
+            return svgCreator.createSVG(glyphX, property, title, description, backgroundWithCSS, backgroundTransparent, backgroundColor, primarySignColor, roundLineCap);
         } catch (ParserConfigurationException | XmlPullParserException | IOException |
                  SAXException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Document convertToSVGDocument(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
+    public Document convertToSVGDocument(String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
         this.onExportStarted();
-        Document document = createSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent);
+        Document document = createSVGDocument(title, description, backgroundWithCSS, backgroundTransparent);
         this.onExportCompleted();
         return document;
     }
 
-    private String createSVGString(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
-        return convertToXmlString(createSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent));
+    private String createSVGString(String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
+        return convertToXmlString(createSVGDocument(title, description, backgroundWithCSS, backgroundTransparent));
     }
 
-    public String convertToSVGString(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
+    public String convertToSVGString(String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
         this.onExportStarted();
-        String svgString = createSVGString(context, title, description, backgroundWithCSS, backgroundTransparent);
+        String svgString = createSVGString(title, description, backgroundWithCSS, backgroundTransparent);
         this.onExportCompleted();
         return svgString;
     }
 
-    public void convertToPNGFile(Context context, File outputFile, int width, int height, int quality, boolean backgroundTransparent) {
+    public void convertToPNGFile(File outputFile, int width, int height, int quality, boolean backgroundTransparent, boolean autoSizeRatio) {
         this.onExportStarted();
-        String svgString = createSVGString(context, null, null, false, backgroundTransparent);
+        String svgString = createSVGString(null, null, false, backgroundTransparent);
         BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, quality, outputFile);
         try {
             bitmapCreator.createPNG();
@@ -106,9 +111,9 @@ public class Seshat {
         }
     }
 
-    public void convertToJPGFile(Context context, File outputFile, int width, int height, int quality) {
+    public void convertToJPGFile(File outputFile, int width, int height, int quality, boolean autoSizeRatio) {
         this.onExportStarted();
-        String svgString = createSVGString(context, null, null, false, false);
+        String svgString = createSVGString(null, null, false, false);
         BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, quality, outputFile);
         try {
             bitmapCreator.createJPG();
