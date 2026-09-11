@@ -89,15 +89,23 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 if (i == 0){
                     binding.backgroundWithCSS.setVisibility(View.VISIBLE);
                     binding.transparentBackground.setVisibility(View.VISIBLE);
+                    binding.qualityTitle.setVisibility(View.GONE);
+                    binding.quality.setVisibility(View.GONE);
                 } else if (i == 1){
                     binding.backgroundWithCSS.setVisibility(View.GONE);
                     binding.transparentBackground.setVisibility(View.VISIBLE);
+                    binding.qualityTitle.setVisibility(View.VISIBLE);
+                    binding.quality.setVisibility(View.VISIBLE);
                 } else if (i == 2){
                     binding.backgroundWithCSS.setVisibility(View.GONE);
                     binding.transparentBackground.setVisibility(View.GONE);
+                    binding.qualityTitle.setVisibility(View.VISIBLE);
+                    binding.quality.setVisibility(View.VISIBLE);
                 } else {
                     binding.backgroundWithCSS.setVisibility(View.VISIBLE);
                     binding.transparentBackground.setVisibility(View.VISIBLE);
+                    binding.qualityTitle.setVisibility(View.GONE);
+                    binding.quality.setVisibility(View.GONE);
                 }
             }
 
