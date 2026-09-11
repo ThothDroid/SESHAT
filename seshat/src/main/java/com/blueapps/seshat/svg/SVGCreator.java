@@ -35,13 +35,18 @@ public class SVGCreator {
     public static final String SVG_XMLNS_ATTRIBUTE = "xmlns";
     public static final String SVG_XMLNS_VALUE = "http://www.w3.org/2000/svg";
     public static final String SVG_VIEWBOX_ATTRIBUTE = "viewBox";
+    public static final String SVG_STYLE_ATTRIBUTE = "style";
     public static final String SVG_TITLE_TAG = "title";
     public static final String SVG_DESC_TAG = "desc";
     public static final String SVG_ID_TAG = "id";
     public static final String SVG_PATH_TAG = "path";
     public static final String SVG_PATH_ATTRIBUTE_D = "d";
+    public static final String SVG_RECT_TAG = "rect";
+    public static final String SVG_WIDTH_ATTRIBUTE = "width";
+    public static final String SVG_HEIGHT_ATTRIBUTE = "height";
+    public static final String SVG_FILL_ATTRIBUTE = "fill";
 
-    public static Document createSVG(Context context, Seshat seshat, String glyphX, BoundProperty property, String title, String description) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
+    public static Document createSVG(Context context, Seshat seshat, String glyphX, BoundProperty property, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) throws ParserConfigurationException, XmlPullParserException, IOException, SAXException {
 
         // create Document
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -64,6 +69,19 @@ public class SVGCreator {
             Element descElement = svg.createElement(SVG_DESC_TAG);
             descElement.setAttribute(SVG_ID_TAG, description);
             root.appendChild(descElement);
+        }
+
+        // Set background
+        if (!backgroundTransparent) {
+            if (backgroundWithCSS) {
+                root.setAttribute(SVG_STYLE_ATTRIBUTE, "background-color: " + "blue" + ";");
+            } else {
+                Element backgroundRect = svg.createElement(SVG_RECT_TAG);
+                backgroundRect.setAttribute(SVG_WIDTH_ATTRIBUTE, "100%");
+                backgroundRect.setAttribute(SVG_HEIGHT_ATTRIBUTE, "100%");
+                backgroundRect.setAttribute(SVG_FILL_ATTRIBUTE, "blue");
+                root.appendChild(backgroundRect);
+            }
         }
 
         // Convert String to XmlDocument

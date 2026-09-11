@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             new Thread(() -> {
                 seshat.setGlyphX(binding.input.getText().toString());
                 seshat.addSeshatListener(MainActivity.this);
-                exportContent = seshat.convertToSVGString(this, "Test", "Test description");
+                exportContent = seshat.convertToSVGString(this, "Test", "Test description", true, false);
                 startSAF(activityResultLauncher);
             }).start();
         });

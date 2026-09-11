@@ -56,21 +56,21 @@ public class Seshat {
         this.handler = handler;
     }
 
-    public Document convertToSVGDocument(Context context, String title, String description) {
+    public Document convertToSVGDocument(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
         this.onExportStarted();
         try {
             BoundProperty property = new BoundProperty(0, 0, textSize, verticalOrientation, writingDirection,
                     writingLayout, drawLines, lineThickness, pagePaddingLeft, pagePaddingTop,
                     pagePaddingRight, pagePaddingBottom, signPadding, layoutSignPadding, interLinePadding);
-            return SVGCreator.createSVG(context, this, glyphX, property, title, description);
+            return SVGCreator.createSVG(context, this, glyphX, property, title, description, backgroundWithCSS, backgroundTransparent);
         } catch (ParserConfigurationException | XmlPullParserException | IOException |
                  SAXException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public String convertToSVGString(Context context, String title, String description) {
-        return convertToXmlString(convertToSVGDocument(context, title, description));
+    public String convertToSVGString(Context context, String title, String description, boolean backgroundWithCSS, boolean backgroundTransparent) {
+        return convertToXmlString(convertToSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent));
     }
 
     public static Document convertToXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {
