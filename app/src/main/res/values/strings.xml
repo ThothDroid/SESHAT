@@ -27,6 +27,7 @@
     <string name="inter_line_padding">"Inter Line Padding: "</string>
     <string name="css_background">CSS background</string>
     <string name="transparent_background">transparent background</string>
+    <string name="post_processing">Post Processing…</string>
     <string-array name="file_formats">
         <item>SVG</item>
         <item>PNG</item>

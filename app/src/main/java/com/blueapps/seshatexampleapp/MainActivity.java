@@ -396,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
     @Override
     public void onExportStarted() {
+        binding.progressBar.setIndeterminate(false);
         binding.progressBar.setVisibility(View.VISIBLE);
     }
 
@@ -408,7 +409,8 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
     @Override
     public void onPostProcessingStarted() {
-
+        binding.progressBar.setIndeterminate(true);
+        binding.progressText.setText(getString(R.string.post_processing));
     }
 
     @Override
