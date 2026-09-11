@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
     private boolean cssBackground = false;
     private boolean backgroundTransparent = true;
+    private int quality = 0;
     private int fileType = 0;
 
     private static final int[] Colors = {Color.BLACK, Color.WHITE, Color.GRAY, Color.CYAN, Color.MAGENTA, Color.YELLOW};
@@ -72,10 +73,10 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                     exportContent = seshat.convertToSVGString(this, "Test", "Test description", cssBackground, backgroundTransparent);
                 } else if (fileType == 1) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.png");
-                    seshat.convertToPNGFile(this, cacheFile, 800, 800, 0, backgroundTransparent);
+                    seshat.convertToPNGFile(this, cacheFile, 800, 800, quality, backgroundTransparent);
                 } else if (fileType == 2) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.jpg");
-                    seshat.convertToJPGFile(this, cacheFile, 800, 800, 0);
+                    seshat.convertToJPGFile(this, cacheFile, 800, 800, quality);
                 }
                 startSAF(activityResultLauncher);
             }).start();
@@ -102,6 +103,25 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        // Define Quality Seekbar
+        binding.quality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                binding.qualityTitle.setText(getString(R.string.quality_title) + " " + i + "%");
+                quality = i;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });

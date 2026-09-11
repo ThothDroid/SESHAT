@@ -28,6 +28,7 @@
     <string name="css_background">CSS background</string>
     <string name="transparent_background">transparent background</string>
     <string name="post_processing">Post Processing…</string>
+    <string name="quality_title">Compression strength (0 - best quality, 100 - smallest file size):</string>
     <string-array name="file_formats">
         <item>SVG</item>
         <item>PNG</item>
