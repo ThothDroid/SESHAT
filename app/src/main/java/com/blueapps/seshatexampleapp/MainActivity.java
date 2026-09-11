@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.SeekBar;
+import android.os.Handler;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -21,12 +23,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.blueapps.seshat.Seshat;
+import com.blueapps.seshat.SeshatListener;
 import com.blueapps.seshatexampleapp.databinding.ActivityMainBinding;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class MainActivity extends AppCompatActivity implements ActivityResultCallback<ActivityResult> {
+public class MainActivity extends AppCompatActivity implements ActivityResultCallback<ActivityResult> , SeshatListener {
 
     private ActivityMainBinding binding;
 
@@ -55,9 +58,12 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         seshat = new Seshat();
 
         binding.buttonExport.setOnClickListener(v -> {
-            seshat.setGlyphX(binding.input.getText().toString());
-            exportContent = seshat.convertToSVGString(this, "Test", "Test description");
-            startSAF(activityResultLauncher);
+            new Thread(() -> {
+                seshat.setGlyphX(binding.input.getText().toString(), new Handler(getMainLooper()));
+                seshat.addSeshatListener(MainActivity.this);
+                exportContent = seshat.convertToSVGString(this, "Test", "Test description");
+                startSAF(activityResultLauncher);
+            }).start();
         });
 
         // Define verticalOrientation RadioGroup
@@ -324,5 +330,23 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 }
             }
         }
+    }
+
+    @Override
+    public void onExportStarted() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onExportProgress(int progress, int total) {
+        binding.progressText.setVisibility(View.VISIBLE);
+        binding.progressText.setText(progress + "/" + total + " " + (int) ((float) progress / total * 100) + "%");
+        binding.progressBar.setProgress((int) ((float) progress / total * 100));
+    }
+
+    @Override
+    public void onExportCompleted() {
+        binding.progressBar.setVisibility(View.INVISIBLE);
+        binding.progressText.setVisibility(View.INVISIBLE);
     }
 }

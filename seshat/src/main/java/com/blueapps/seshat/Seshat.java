@@ -1,6 +1,7 @@
 package com.blueapps.seshat;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.blueapps.maat.BoundProperty;
 import com.blueapps.seshat.svg.SVGCreator;
@@ -13,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,6 +29,8 @@ import javax.xml.transform.stream.StreamResult;
 public class Seshat {
 
     private String glyphX = "";
+    private ArrayList<SeshatListener> listeners = new ArrayList<>();
+    private Handler handler;
 
     // basic properties
     private float textSize = 100f;
@@ -43,18 +47,20 @@ public class Seshat {
     private float layoutSignPadding = 5f;
     private float interLinePadding = 25f;
 
-    public Seshat(String GlyphX){
+    public Seshat(String GlyphX, Handler handler){
         this.glyphX = GlyphX;
+        this.handler = handler;
     }
 
     public Seshat(){}
 
     public Document convertToSVGDocument(Context context, String title, String description) {
+        this.onExportStarted();
         try {
             BoundProperty property = new BoundProperty(0, 0, textSize, verticalOrientation, writingDirection,
                     writingLayout, drawLines, lineThickness, pagePaddingLeft, pagePaddingTop,
                     pagePaddingRight, pagePaddingBottom, signPadding, layoutSignPadding, interLinePadding);
-            return SVGCreator.createSVG(context, glyphX, property, title, description);
+            return SVGCreator.createSVG(context, this, glyphX, property, title, description);
         } catch (ParserConfigurationException | XmlPullParserException | IOException |
                  SAXException e) {
             throw new RuntimeException(e);
@@ -207,5 +213,34 @@ public class Seshat {
 
     public void setInterLinePadding(float interLinePadding) {
         this.interLinePadding = interLinePadding;
+    }
+
+
+    public void addSeshatListener(SeshatListener listener){
+        listeners.add(listener);
+    }
+
+    public void onExportStarted(){
+        handler.post(() -> {
+            for (SeshatListener listener : listeners) {
+                listener.onExportStarted();
+            }
+        });
+    }
+
+    public void onExportProgress(int progress, int total){
+        handler.post(() -> {
+            for (SeshatListener listener : listeners) {
+                listener.onExportProgress(progress, total);
+            }
+        });
+    }
+
+    public void onExportCompleted(){
+        handler.post(() -> {
+            for (SeshatListener listener : listeners) {
+                listener.onExportCompleted();
+            }
+        });
     }
 }
