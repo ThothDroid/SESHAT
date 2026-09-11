@@ -150,6 +150,14 @@
                     android:text="1000" />
             </LinearLayout>
 
+            <CheckBox
+                android:id="@+id/autoSizeRatio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/automatically_size_height" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

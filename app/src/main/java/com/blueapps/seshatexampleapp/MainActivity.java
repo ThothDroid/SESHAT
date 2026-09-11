@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
     private int quality = 0;
     private int width = 1000;
     private int height = 1000;
+    private boolean autoSizeRatio = false;
     private int fileType = 0;
 
     private static final int[] Colors = {Color.BLACK, Color.WHITE, Color.GRAY, Color.CYAN, Color.MAGENTA, Color.YELLOW};
@@ -75,10 +76,10 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                     exportContent = seshat.convertToSVGString("Test", "Test description", cssBackground, backgroundTransparent);
                 } else if (fileType == 1) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.png");
-                    seshat.convertToPNGFile(cacheFile, width, height, quality, backgroundTransparent, true);
+                    seshat.convertToPNGFile(cacheFile, width, height, quality, backgroundTransparent, autoSizeRatio);
                 } else if (fileType == 2) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.jpg");
-                    seshat.convertToJPGFile(cacheFile, width, height, quality, true);
+                    seshat.convertToJPGFile(cacheFile, width, height, quality, autoSizeRatio);
                 }
                 startSAF(activityResultLauncher);
             }).start();
@@ -179,6 +180,11 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             public void afterTextChanged(Editable editable) {
 
             }
+        });
+
+        binding.autoSizeRatio.setOnCheckedChangeListener((compoundButton, b) -> {
+            autoSizeRatio = b;
+            binding.height.setEnabled(!b);
         });
 
         // Define verticalOrientation RadioGroup
