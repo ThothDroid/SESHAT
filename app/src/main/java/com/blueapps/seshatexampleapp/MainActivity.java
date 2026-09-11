@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 } else if (fileType == 1) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.png");
                     seshat.convertToPNGFile(this, cacheFile, 800, 800, 0, backgroundTransparent);
+                } else if (fileType == 2) {
+                    File cacheFile = new File(this.getCacheDir(), "temp_file.jpg");
+                    seshat.convertToJPGFile(this, cacheFile, 800, 800, 0);
                 }
                 startSAF(activityResultLauncher);
             }).start();
@@ -84,10 +87,16 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 fileType = i;
                 if (i == 0){
                     binding.backgroundWithCSS.setVisibility(View.VISIBLE);
+                    binding.transparentBackground.setVisibility(View.VISIBLE);
                 } else if (i == 1){
                     binding.backgroundWithCSS.setVisibility(View.GONE);
+                    binding.transparentBackground.setVisibility(View.VISIBLE);
+                } else if (i == 2){
+                    binding.backgroundWithCSS.setVisibility(View.GONE);
+                    binding.transparentBackground.setVisibility(View.GONE);
                 } else {
                     binding.backgroundWithCSS.setVisibility(View.VISIBLE);
+                    binding.transparentBackground.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -346,6 +355,11 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/png"});
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.putExtra(Intent.EXTRA_TITLE, "test.png");
+        } else if (fileType == 2){
+            intent.setType("image/jpeg");
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpeg"});
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.putExtra(Intent.EXTRA_TITLE, "test.jpg");
         }
         activityResultLauncher.launch(intent);
 
@@ -376,9 +390,14 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                    } else if (fileType == 1) {
-                        // For PNG, we already saved the file in cache, now we need to copy it to the selected URI
-                        File cacheFile = new File(this.getCacheDir(), "temp_file.png");
+                    } else if (fileType == 1 || fileType == 2) {
+                        // For PNG and JPG, we already saved the file in cache, now we need to copy it to the selected URI
+                        File cacheFile;
+                        if (fileType == 1) {
+                            cacheFile = new File(this.getCacheDir(), "temp_file.png");
+                        } else {
+                            cacheFile = new File(this.getCacheDir(), "temp_file.jpg");
+                        }
                         try (OutputStream outputStream = getContentResolver().openOutputStream(uri)) {
                             if (outputStream != null) {
                                 Files.copy(cacheFile.toPath(), outputStream);

@@ -106,9 +106,9 @@ public class Seshat {
         }
     }
 
-    public void convertToJPGFile(Context context, File outputFile, int width, int height, int quality, boolean backgroundTransparent) {
+    public void convertToJPGFile(Context context, File outputFile, int width, int height, int quality) {
         this.onExportStarted();
-        String svgString = createSVGString(context, null, null, false, backgroundTransparent);
+        String svgString = createSVGString(context, null, null, false, false);
         BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, quality, outputFile);
         try {
             bitmapCreator.createJPG();

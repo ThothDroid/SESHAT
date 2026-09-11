@@ -31,5 +31,6 @@
     <string-array name="file_formats">
         <item>SVG</item>
         <item>PNG</item>
+        <item>JPEG</item>
     </string-array>
 </resources>
