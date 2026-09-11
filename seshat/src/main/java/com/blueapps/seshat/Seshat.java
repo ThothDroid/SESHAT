@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt;
 import com.blueapps.maat.BoundProperty;
 import com.blueapps.seshat.bitmap.BitmapCreator;
 import com.blueapps.seshat.svg.SVGCreator;
+import com.caverock.androidsvg.SVGParseException;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -80,11 +81,15 @@ public class Seshat {
         return convertToXmlString(convertToSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent));
     }
 
-    public void convertToPNGFile(Context context, File outputFile, int width, int height, boolean backgroundTransparent) {
+    public void convertToPNGFile(Context context, File outputFile, int width, int height, int quality, boolean backgroundTransparent) {
         String svgString = convertToSVGString(context, null, null, false, backgroundTransparent);
         onPostProcessingStarted();
-        BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, outputFile);
-        bitmapCreator.createPNG();
+        BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, quality, outputFile);
+        try {
+            bitmapCreator.createPNG();
+        } catch (SVGParseException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Document convertToXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {
