@@ -40,7 +40,7 @@ public class Command {
                     stringValue = StringUtils.remove(stringValue, ',');
                     stringValue = StringUtils.remove(stringValue, ' ');
                     try {
-                        this.values.add(Float.parseFloat(stringValue));
+                        if (!stringValue.isEmpty()) this.values.add(Float.parseFloat(stringValue));
                     } catch (NumberFormatException e) {
                         throw new RuntimeException(e);
                     }
