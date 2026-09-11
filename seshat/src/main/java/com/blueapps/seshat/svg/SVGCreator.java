@@ -95,7 +95,7 @@ public class SVGCreator {
         Document document = builder.parse(inputStream);
 
         // add sign tags
-        BoundCalculation boundCalculation = attachSignChildren(context, seshat, svg, root, document, property);
+        BoundCalculation boundCalculation = attachSignChildren(context, seshat, svg, root, document, property, primarySignColor);
 
         // set the viewBox attribute for the root element
         root.setAttribute(SVG_VIEWBOX_ATTRIBUTE, "0 0 " + boundCalculation.getWidth() + " " + boundCalculation.getHeight());
@@ -105,7 +105,7 @@ public class SVGCreator {
         return svg;
     }
 
-    private static BoundCalculation attachSignChildren(Context context, Seshat seshat, Document svg, Element root, Document document, BoundProperty property) throws XmlPullParserException, IOException, SAXException {
+    private static BoundCalculation attachSignChildren(Context context, Seshat seshat, Document svg, Element root, Document document, BoundProperty property, @ColorInt int primarySignColor) throws XmlPullParserException, IOException, SAXException {
         BoundCalculation boundCalculation = new BoundCalculation(document);
         ArrayList<String> ids = boundCalculation.getIds(false, false);
         int total = ids.size() * 2; // multiply by 2 to account for both path and bounds processing
@@ -153,6 +153,8 @@ public class SVGCreator {
             signPath = applyBound(signPath, bound, dimensions.get(counter).getKey(), dimensions.get(counter).getValue());
             // set the "d" attribute of the <path> element
             path.setAttribute(SVG_PATH_ATTRIBUTE_D, signPath);
+            // set the "fill" attribute of the <path> element
+            path.setAttribute(SVG_FILL_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
             // add the <path> element to the root element
             root.appendChild(path);
             seshat.onExportProgress(exportCounter, total);
