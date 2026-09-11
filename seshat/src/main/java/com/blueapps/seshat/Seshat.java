@@ -7,7 +7,7 @@ import android.os.Handler;
 import androidx.annotation.ColorInt;
 
 import com.blueapps.maat.BoundProperty;
-import com.blueapps.seshat.bitmap.PNGCreator;
+import com.blueapps.seshat.bitmap.BitmapCreator;
 import com.blueapps.seshat.svg.SVGCreator;
 
 import org.w3c.dom.Document;
@@ -26,7 +26,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -81,10 +80,11 @@ public class Seshat {
         return convertToXmlString(convertToSVGDocument(context, title, description, backgroundWithCSS, backgroundTransparent));
     }
 
-    public void convertToPNGFile(Context context, File outputFile, boolean backgroundTransparent) {
+    public void convertToPNGFile(Context context, File outputFile, int width, int height, boolean backgroundTransparent) {
         String svgString = convertToSVGString(context, null, null, false, backgroundTransparent);
-        PNGCreator pngCreator = new PNGCreator(svgString, 800, 800, outputFile);
-        pngCreator.createPNG();
+        onPostProcessingStarted();
+        BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, outputFile);
+        bitmapCreator.createPNG();
     }
 
     public static Document convertToXmlDocument(String xml) throws ParserConfigurationException, IOException, SAXException {
@@ -271,6 +271,14 @@ public class Seshat {
         handler.post(() -> {
             for (SeshatListener listener : listeners) {
                 listener.onExportProgress(progress, total);
+            }
+        });
+    }
+
+    public void onPostProcessingStarted(){
+        handler.post(() -> {
+            for (SeshatListener listener : listeners) {
+                listener.onPostProcessingStarted();
             }
         });
     }
