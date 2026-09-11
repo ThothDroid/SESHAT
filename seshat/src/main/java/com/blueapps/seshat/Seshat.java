@@ -1,6 +1,7 @@
 package com.blueapps.seshat;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.blueapps.maat.BoundProperty;
 import com.blueapps.seshat.svg.SVGCreator;
@@ -28,6 +29,7 @@ import javax.xml.transform.stream.StreamResult;
 public class Seshat {
 
     private ArrayList<SeshatListener> listeners = new ArrayList<>();
+    private Handler handler;
 
     private String glyphX;
 
@@ -46,8 +48,9 @@ public class Seshat {
     private float layoutSignPadding = 5f;
     private float interLinePadding = 25f;
 
-    public Seshat(String GlyphX){
+    public Seshat(String GlyphX, Handler handler){
         this.glyphX = GlyphX;
+        this.handler = handler;
     }
 
     public Document convertToSVGDocument(Context context, String title, String description) {
@@ -217,20 +220,26 @@ public class Seshat {
     }
 
     public void onExportStarted(){
-        for (SeshatListener listener : listeners) {
-            listener.onExportStarted();
-        }
+        handler.post(() -> {
+            for (SeshatListener listener : listeners) {
+                listener.onExportStarted();
+            }
+        });
     }
 
     public void onExportProgress(int progress, int total){
-        for (SeshatListener listener : listeners) {
-            listener.onExportProgress(progress, total);
-        }
+        handler.post(() -> {
+            for (SeshatListener listener : listeners) {
+                listener.onExportProgress(progress, total);
+            }
+        });
     }
 
     public void onExportCompleted(){
-        for (SeshatListener listener : listeners) {
-            listener.onExportCompleted();
-        }
+        handler.post(() -> {
+            for (SeshatListener listener : listeners) {
+                listener.onExportCompleted();
+            }
+        });
     }
 }

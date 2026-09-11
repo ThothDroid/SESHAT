@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 new ActivityResultContracts.StartActivityForResult(), this);
 
         binding.buttonExport.setOnClickListener(v -> {
-            Seshat seshat = new Seshat(binding.input.getText().toString());
+            Seshat seshat = new Seshat(binding.input.getText().toString(), new Handler(getMainLooper()));
             seshat.addSeshatListener(MainActivity.this);
             exportContent = seshat.convertToSVGString(this, "Test", "Test description");
             startSAF(activityResultLauncher);
