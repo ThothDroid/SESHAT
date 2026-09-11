@@ -116,20 +116,38 @@ public class SVGCreator {
     }
 
     private static void addLines(Document svg, BoundProperty property, float width, float height, Element root, @ColorInt int primarySignColor, boolean roundLineCap) {
-        float textLineHeight = property.getTextSize() + property.getInterLinePadding() + property.getLineThickness();
-        float halfInterTextSpace = (property.getInterLinePadding() + property.getLineThickness()) / 2;
-        for (float y = property.getPagePaddingTop() + textLineHeight; y < height - property.getPagePaddingBottom(); y += textLineHeight) {
-            Element lineElement = svg.createElement(SVG_LINE_TAG);
-            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X1, String.valueOf(property.getPagePaddingLeft()));
-            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y1, String.valueOf(y - halfInterTextSpace));
-            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X2, String.valueOf(width - property.getPagePaddingRight()));
-            lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y2, String.valueOf(y - halfInterTextSpace));
-            lineElement.setAttribute(SVG_STROKE_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
-            lineElement.setAttribute(SVG_STROKE_WIDTH_ATTRIBUTE, String.valueOf(property.getLineThickness()));
-            if (roundLineCap) {
-                lineElement.setAttribute("stroke-linecap", "round");
+        if (property.getWritingLayout() == BoundProperty.WRITING_LAYOUT_LINES) {
+            float textLineHeight = property.getTextSize() + property.getInterLinePadding() + property.getLineThickness();
+            float halfInterTextSpace = (property.getInterLinePadding() + property.getLineThickness()) / 2;
+            for (float y = property.getPagePaddingTop() + textLineHeight; y < height - property.getPagePaddingBottom(); y += textLineHeight) {
+                Element lineElement = svg.createElement(SVG_LINE_TAG);
+                lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X1, String.valueOf(property.getPagePaddingLeft()));
+                lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y1, String.valueOf(y - halfInterTextSpace));
+                lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X2, String.valueOf(width - property.getPagePaddingRight()));
+                lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y2, String.valueOf(y - halfInterTextSpace));
+                lineElement.setAttribute(SVG_STROKE_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
+                lineElement.setAttribute(SVG_STROKE_WIDTH_ATTRIBUTE, String.valueOf(property.getLineThickness()));
+                if (roundLineCap) {
+                    lineElement.setAttribute("stroke-linecap", "round");
+                }
+                root.appendChild(lineElement);
             }
-            root.appendChild(lineElement);
+        } else {
+            float textLineWidth = property.getTextSize() + property.getInterLinePadding() + property.getLineThickness();
+            float halfInterTextSpace = (property.getInterLinePadding() + property.getLineThickness()) / 2;
+            for (float x = property.getPagePaddingLeft() + textLineWidth; x < width - property.getPagePaddingRight(); x += textLineWidth) {
+                Element lineElement = svg.createElement(SVG_LINE_TAG);
+                lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X1, String.valueOf(x - halfInterTextSpace));
+                lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y1, String.valueOf(property.getPagePaddingTop()));
+                lineElement.setAttribute(SVG_LINE_ATTRIBUTE_X2, String.valueOf(x - halfInterTextSpace));
+                lineElement.setAttribute(SVG_LINE_ATTRIBUTE_Y2, String.valueOf(height - property.getPagePaddingBottom()));
+                lineElement.setAttribute(SVG_STROKE_ATTRIBUTE, String.format("#%06X", (0xFFFFFF & primarySignColor)));
+                lineElement.setAttribute(SVG_STROKE_WIDTH_ATTRIBUTE, String.valueOf(property.getLineThickness()));
+                if (roundLineCap) {
+                    lineElement.setAttribute("stroke-linecap", "round");
+                }
+                root.appendChild(lineElement);
+            }
         }
     }
 
