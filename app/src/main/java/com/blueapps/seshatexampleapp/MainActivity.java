@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -17,12 +18,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.blueapps.seshat.Seshat;
+import com.blueapps.seshat.SeshatListener;
 import com.blueapps.seshatexampleapp.databinding.ActivityMainBinding;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class MainActivity extends AppCompatActivity implements ActivityResultCallback<ActivityResult> {
+public class MainActivity extends AppCompatActivity implements ActivityResultCallback<ActivityResult> , SeshatListener {
 
     private ActivityMainBinding binding;
 
@@ -89,5 +91,23 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 }
             }
         }
+    }
+
+    @Override
+    public void onExportStarted() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.progressText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onExportProgress(int progress, int total) {
+        binding.progressText.setText(progress + "/" + total + " " + (int) ((float) progress / total * 100) + "%");
+        binding.progressBar.setProgress((int) ((float) progress / total * 100));
+    }
+
+    @Override
+    public void onExportCompleted() {
+        binding.progressBar.setVisibility(View.INVISIBLE);
+        binding.progressText.setVisibility(View.INVISIBLE);
     }
 }
