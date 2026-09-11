@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
     private boolean cssBackground = false;
     private boolean backgroundTransparent = true;
     private int quality = 0;
+    private int width = 1000;
+    private int height = 1000;
     private int fileType = 0;
 
     private static final int[] Colors = {Color.BLACK, Color.WHITE, Color.GRAY, Color.CYAN, Color.MAGENTA, Color.YELLOW};
@@ -73,10 +75,10 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                     exportContent = seshat.convertToSVGString(this, "Test", "Test description", cssBackground, backgroundTransparent);
                 } else if (fileType == 1) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.png");
-                    seshat.convertToPNGFile(this, cacheFile, 800, 800, quality, backgroundTransparent);
+                    seshat.convertToPNGFile(this, cacheFile, width, height, quality, backgroundTransparent);
                 } else if (fileType == 2) {
                     File cacheFile = new File(this.getCacheDir(), "temp_file.jpg");
-                    seshat.convertToJPGFile(this, cacheFile, 800, 800, quality);
+                    seshat.convertToJPGFile(this, cacheFile, width, height, quality);
                 }
                 startSAF(activityResultLauncher);
             }).start();
@@ -134,6 +136,47 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        // Define size
+        binding.height.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    height = Integer.parseInt(charSequence.toString());
+                } catch (NumberFormatException e) {
+                    height = 1000;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        binding.width.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    width = Integer.parseInt(charSequence.toString());
+                } catch (NumberFormatException e) {
+                    width = 1000;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
