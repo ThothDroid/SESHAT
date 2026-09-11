@@ -102,6 +102,10 @@ public class Seshat {
     public void convertToPNGFile(File outputFile, int width, int height, int quality, boolean backgroundTransparent, boolean autoSizeRatio) {
         this.onExportStarted();
         String svgString = createSVGString(null, null, false, backgroundTransparent);
+        if (autoSizeRatio){
+            float ratio = svgCreator.getHeight() / svgCreator.getWidth();
+            height = (int) (width * ratio);
+        }
         BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, quality, outputFile);
         try {
             bitmapCreator.createPNG();
@@ -114,6 +118,10 @@ public class Seshat {
     public void convertToJPGFile(File outputFile, int width, int height, int quality, boolean autoSizeRatio) {
         this.onExportStarted();
         String svgString = createSVGString(null, null, false, false);
+        if (autoSizeRatio){
+            float ratio = svgCreator.getHeight() / svgCreator.getWidth();
+            height = (int) (width * ratio);
+        }
         BitmapCreator bitmapCreator = new BitmapCreator(svgString, width, height, quality, outputFile);
         try {
             bitmapCreator.createJPG();

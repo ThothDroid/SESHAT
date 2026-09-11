@@ -34,8 +34,8 @@ public class SVGCreator {
     private Context context;
     private Seshat seshat;
 
-    private float width;
-    private float height;
+    private float width = 1;
+    private float height = 1;
     private Element root;
     private Document glyphXDocument;
     private Document svg;
@@ -227,4 +227,11 @@ public class SVGCreator {
         return boundCalculation;
     }
 
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
 }
