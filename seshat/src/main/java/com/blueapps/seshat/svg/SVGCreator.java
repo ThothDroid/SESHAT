@@ -123,7 +123,7 @@ public class SVGCreator {
             String signPath = paths.get(counter);
             // mirror the path vertically
             if (property.getWritingDirection() == BoundProperty.WRITING_DIRECTION_RTL){
-                signPath = mirrorPathVertically(signPath);
+                signPath = mirrorPathVertically(signPath, dimensions.get(counter).getKey());
             }
             // apply  transformation to the sign path based on the bounds
             signPath = applyBound(signPath, bound, dimensions.get(counter).getKey(), dimensions.get(counter).getValue());

@@ -64,7 +64,7 @@ public class SVGPath {
         }
     }
 
-    public void mirrorVertically(){
+    public void mirrorVertically(float width){
         //
     }
 

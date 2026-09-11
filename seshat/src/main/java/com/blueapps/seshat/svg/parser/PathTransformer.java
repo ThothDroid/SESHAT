@@ -23,10 +23,10 @@ public class PathTransformer {
         return path;
     }
 
-    public static String mirrorPathVertically(String path){
+    public static String mirrorPathVertically(String path, float width){
 
         SVGPath svgPath = new SVGPath(path);
-        svgPath.mirrorVertically();
+        svgPath.mirrorVertically(width);
 
         return svgPath.toString();
 
